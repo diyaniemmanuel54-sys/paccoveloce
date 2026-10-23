@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pacco Veloce — Site in preparazione</title>
+<meta name="description" content="Pacco Veloce: il sito è in fase di preparazione.">
+<meta name="robots" content="noindex, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101a2b;
+    --muted:#5c6b82;
+    --brand:#0f6bff;
+    --brand-dark:#0a4fc4;
+    --line:#e3e9f2;
+    --bg:#f6f9ff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(900px 500px at 12% -10%, #dbe7ff 0%, transparent 60%),
+      radial-gradient(700px 420px at 105% 0%, #e6f0ff 0%, transparent 55%),
+      var(--bg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+  }
+  .card{
+    width:100%;
+    max-width:720px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:clamp(26px,4vw,52px);
+    box-shadow:0 24px 60px rgba(16,26,43,.08);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:26px;
+  }
+  .mark{
+    width:44px;height:44px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--brand),#63a4ff);
+    display:grid;place-items:center;
+    color:#fff;
+    flex:0 0 auto;
+    box-shadow:0 10px 22px rgba(15,107,255,.28);
+  }
+  .mark svg{width:24px;height:24px;display:block}
+  .name{font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+  .name span{color:var(--brand)}
+  h1{
+    font-size:clamp(1.7rem,3.6vw,2.5rem);
+    line-height:1.12;
+    letter-spacing:-.03em;
+    margin:0 0 14px;
+  }
+  p{
+    margin:0 0 12px;
+    color:var(--muted);
+    font-size:1.02rem;
+    line-height:1.65;
+  }
+  .divider{height:1px;background:var(--line);margin:26px 0}
+  .tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:.8rem;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--brand-dark);
+    background:#eaf1ff;
+    border-radius:999px;
+    padding:7px 14px;
+    margin-bottom:18px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px rgba(15,107,255,.15)}
+  .fr{color:var(--muted);font-size:.96rem}
+  footer{margin-top:26px;font-size:.85rem;color:#8b98ad}
+  a{color:var(--brand-dark)}
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 7.5 12 3l9 4.5v9L12 21 3 16.5z"/>
+          <path d="M3 7.5 12 12l9-4.5"/>
+          <path d="M12 12v9"/>
+        </svg>
+      </div>
+      <div class="name">Pacco<span>Veloce</span></div>
+    </div>
+
+    <span class="tag"><span class="dot"></span>In preparazione</span>
+
+    <h1>Il sito sta arrivando.</h1>
+    <p>Stiamo preparando le pagine di <strong>Pacco Veloce</strong>. Torna a trovarci tra poco: il sito sarà online a questo stesso indirizzo.</p>
+
+    <div class="divider"></div>
+
+    <p class="fr"><strong>Version française —</strong> Le site <strong>Pacco Veloce</strong> est en cours de préparation. Il sera disponible à cette même adresse très prochainement.</p>
+
+    <footer>paccoveloce — GitHub Pages</footer>
+  </main>
+</body>
+</html>
