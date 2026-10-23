@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Avatar de Giulia Romano">
+  <defs>
+    <clipPath id="avg-c"><circle cx="120" cy="120" r="116"/></clipPath>
+  </defs>
+  <circle cx="120" cy="120" r="116" fill="#ffe9d6"/>
+  <g clip-path="url(#avg-c)">
+    <path d="M62 128 C58 54 94 38 120 38 C146 38 182 54 178 128 L178 200 C158 212 82 212 62 200 Z" fill="#6b4a32"/>
+    <path d="M52 244 C52 196 82 170 120 170 C158 170 188 196 188 244 Z" fill="#009246"/>
+    <path d="M104 174 L120 202 L136 174 L120 180 Z" fill="#ffffff"/>
+    <ellipse cx="120" cy="112" rx="38" ry="42" fill="#f6cfa4"/>
+    <path d="M82 100 C86 60 154 60 158 100 C148 76 92 76 82 100 Z" fill="#6b4a32"/>
+    <rect x="96" y="100" width="16" height="5" rx="2.5" fill="#6b4a32"/>
+    <rect x="128" y="100" width="16" height="5" rx="2.5" fill="#6b4a32"/>
+    <circle cx="106" cy="116" r="4" fill="#22303c"/>
+    <circle cx="134" cy="116" r="4" fill="#22303c"/>
+    <path d="M104 132 Q120 144 136 132" fill="none" stroke="#a96b44" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="94" cy="128" r="6" fill="#f3b28a" opacity="0.6"/>
+    <circle cx="146" cy="128" r="6" fill="#f3b28a" opacity="0.6"/>
+  </g>
+  <circle cx="120" cy="120" r="112" fill="none" stroke="#ffffff" stroke-width="6"/>
+</svg>

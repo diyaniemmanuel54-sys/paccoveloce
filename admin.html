@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Area riservata — PaccoVeloce</title>
+  <meta name="description" content="Area riservata all'agenzia PaccoVeloce: inserimento spedizioni e generazione dei numeri di consignazione.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="24" rx="5" fill="%230f2a3f"/><path d="M18 10 L26 14 L10 18 L18 22 Z" fill="%23ff6b1a"/></svg>'>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="4" y="4" width="24" height="24" rx="5" fill="#ffffff"/>
+        <path d="M18 10 L26 14 L10 18 L18 22 Z" fill="#ff6b1a"/>
+      </svg>
+      <span>PaccoVeloce<span class="sub"><br>Spedizioni in Italia</span></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="Apri menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="tarifs.html">Tariffe</a>
+      <a href="suivi.html">Tracking</a>
+      <a href="spedizioni.html">Le mie spedizioni</a>
+      <a href="contact.html">Contatti</a>
+    </nav>
+    <div class="nav-cta"><a href="https://wa.me/393508707243">Invia un pacco</a></div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>🔒 Area riservata</h1>
+    <p>Gestione dell'agenzia: inserimento delle spedizioni e generazione dei numeri di consignazione. Accesso consentito solo al titolare.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Verrou : mot de passe agence -->
+    <div class="form-card" id="admin-gate" style="max-width:460px;margin:0 auto;text-align:center;">
+      <h3 style="margin:0 0 8px;">🔑 Accesso riservato</h3>
+      <p style="margin:0 0 18px;color:#5c6b77;">Inserisci la password dell'agenzia per gestire le spedizioni.</p>
+      <form id="gate-form">
+        <div class="form-group">
+          <label for="gate-pass">Password</label>
+          <input id="gate-pass" type="password" required placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <p id="gate-errore" style="display:none;margin:0 0 12px;color:#b3261e;font-weight:600;"></p>
+        <button class="btn" type="submit" style="width:100%;">Accedi</button>
+      </form>
+    </div>
+
+    <!-- Panneau agence (masqué tant que le mot de passe n'est pas saisi) -->
+    <div id="admin-panel" hidden>
+      <div class="form-card">
+        <div id="admin-result"></div>
+        <form data-validate data-generator="shipment" data-store="1" data-result="admin-result">
+          <h3 style="margin:0 0 8px;">1 · Mittente (chi spedisce)</h3>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="rs-nome">Nome e cognome *</label>
+              <input id="rs-nome" type="text" required placeholder="Mario Rossi">
+            </div>
+            <div class="form-group">
+              <label for="rs-tel">Telefono *</label>
+              <input id="rs-tel" type="tel" required placeholder="+39 333 1234567">
+            </div>
+            <div class="form-group">
+              <label for="rs-email">E-mail *</label>
+              <input id="rs-email" type="email" required placeholder="mario@esempio.it">
+            </div>
+            <div class="form-group">
+              <label for="rs-via">Via e numero civile *</label>
+              <input id="rs-via" type="text" required placeholder="Via Roma 12">
+            </div>
+            <div class="form-group">
+              <label for="rs-citta">Città *</label>
+              <input id="rs-citta" type="text" required placeholder="Milano">
+            </div>
+            <div class="form-group">
+              <label for="rs-cap">CAP *</label>
+              <input id="rs-cap" type="text" required data-regex="^\d{5}$" placeholder="20100" inputmode="numeric" maxlength="5">
+            </div>
+            <div class="form-group">
+              <label for="rs-prov">Provincia * <span class="hint">(2 lettere)</span></label>
+              <input id="rs-prov" type="text" required data-regex="^[A-Za-z]{2}$" placeholder="MI" maxlength="2">
+            </div>
+          </div>
+
+          <h3 style="margin:18px 0 8px;">2 · Destinatario (chi riceve)</h3>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="rs-nome-dest">Nome e cognome *</label>
+              <input id="rs-nome-dest" type="text" required placeholder="Anna Bianchi">
+            </div>
+            <div class="form-group">
+              <label for="rs-tel-dest">Telefono destinatario *</label>
+              <input id="rs-tel-dest" type="tel" required placeholder="+39 320 7654321">
+            </div>
+            <div class="form-group">
+              <label for="rs-via-dest">Via e numero civile *</label>
+              <input id="rs-via-dest" type="text" required placeholder="Via Garibaldi 5">
+            </div>
+            <div class="form-group">
+              <label for="rs-citta-dest">Città *</label>
+              <input id="rs-citta-dest" type="text" required placeholder="Palermo">
+            </div>
+            <div class="form-group">
+              <label for="rs-cap-dest">CAP *</label>
+              <input id="rs-cap-dest" type="text" required data-regex="^\d{5}$" placeholder="90100" inputmode="numeric" maxlength="5">
+            </div>
+            <div class="form-group">
+              <label for="rs-prov-dest">Provincia * <span class="hint">(2 lettere)</span></label>
+              <input id="rs-prov-dest" type="text" required data-regex="^[A-Za-z]{2}$" placeholder="PA" maxlength="2">
+            </div>
+          </div>
+
+          <h3 style="margin:18px 0 8px;">3 · Pacco e servizio</h3>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="rs-peso">Peso stimato (kg) *</label>
+              <input id="rs-peso" type="number" min="0.1" step="0.1" required placeholder="2">
+            </div>
+            <div class="form-group">
+              <label for="rs-servizio">Servizio *</label>
+              <select id="rs-servizio" required>
+                <option value="standard">Standard (2–4 giorni)</option>
+                <option value="express">Express (24–48 h)</option>
+                <option value="economico">Economico (3–6 giorni)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="rs-fascia">Fascia oraria di ritiro *</label>
+              <select id="rs-fascia" required>
+                <option value="9_12">9:00 – 12:00</option>
+                <option value="12_15">12:00 – 15:00</option>
+                <option value="15_18">15:00 – 18:00</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="rs-note">Note (opzionale)</label>
+              <input id="rs-note" type="text" placeholder="Es. citofono, piano, ecc.">
+            </div>
+          </div>
+
+          <div id="pv-estimate" class="estimate-box" style="display:none">
+            <div class="estimate-head">🧮 Preventivo stimato</div>
+            <div class="estimate-row"><span>Zona di consegna</span><strong class="pv-est-zone">—</strong></div>
+            <div class="estimate-row"><span>Totale stimato</span><strong class="pv-est-total">—</strong></div>
+            <p class="estimate-note">Preventivo indicativo calcolato in tempo reale. L'importo definitivo può variare in base a dimensioni e valore dichiarato.</p>
+          </div>
+
+          <div class="hp-field" aria-hidden="true">
+            <label for="rs-trap">Non compilare questo campo</label>
+            <input id="rs-trap" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <button class="btn" type="submit" style="width:100%;">Genera numero e registra la spedizione</button>
+          <p class="hint" style="margin-top:10px;font-size:0.8rem;color:#5c6b77;">
+            Il numero di consignazione (norma S10) viene generato, <strong>registrato
+            nell'elenco locale</strong> (così il tracking reale funziona su questo
+            computer) e inviato con tutti i dettagli all'agenzia
+            (velocepacco653@gmail.com). Ricevuta PDF scaricabile subito dopo.
+          </p>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="index.html">
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="4" y="4" width="24" height="24" rx="5" fill="#ffffff"/>
+            <path d="M18 10 L26 14 L10 18 L18 22 Z" fill="#ff6b1a"/>
+          </svg>
+          <span>PaccoVeloce</span>
+        </a>
+        <p class="about">Servizio di spedizione pacchi su tutto il territorio italiano. Affidabilità, velocità e trasparenza a portata di click.</p>
+      </div>
+      <div>
+        <h4>Servizi</h4>
+        <ul>
+          <li><a href="tarifs.html">Tariffe e preventivo</a></li>
+          <li><a href="https://wa.me/393508707243">Prenota via WhatsApp</a></li>
+          <li><a href="suivi.html">Traccia il tuo pacco</a></li>
+          <li><a href="spedizioni.html">Le mie spedizioni</a></li>
+          <li><a href="contact.html">Assistenza clienti</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contatti</h4>
+        <ul>
+          <li>📱 WhatsApp: +39 350 870 7243</li>
+          <li>✉️ velocepacco653@gmail.com</li>
+          <li>📍 Via del Fontanile Arenato, 180</li>
+          <li>🕘 Lun–Dom, 8:00–20:00</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informazioni</h4>
+        <ul>
+          <li><a href="index.html#chi-siamo">Chi siamo</a></li>
+          <li><a href="admin.html">Area riservata</a></li>
+          <li><a href="#">Termini e condizioni</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="flag-strip"></div>
+  <div class="container footer-bottom">
+    © 2026 PaccoVeloce — <span class="flag">Spedizioni in tutta Italia</span>
+  </div>
+</footer>
+
+<script src="assets/js/prezzi.js"></script>
+<script src="assets/js/shipments.js"></script>
+<script src="assets/js/label.js"></script>
+<script src="assets/js/ricevuta.js"></script>
+<script src="assets/js/admin.js"></script>
+<script src="assets/js/form.js"></script>
+</body>
+</html>

@@ -1,121 +1,289 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pacco Veloce — Site in preparazione</title>
-<meta name="description" content="Pacco Veloce: il sito è in fase di preparazione.">
-<meta name="robots" content="noindex, follow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink:#101a2b;
-    --muted:#5c6b82;
-    --brand:#0f6bff;
-    --brand-dark:#0a4fc4;
-    --line:#e3e9f2;
-    --bg:#f6f9ff;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-    color:var(--ink);
-    background:
-      radial-gradient(900px 500px at 12% -10%, #dbe7ff 0%, transparent 60%),
-      radial-gradient(700px 420px at 105% 0%, #e6f0ff 0%, transparent 55%),
-      var(--bg);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:28px;
-  }
-  .card{
-    width:100%;
-    max-width:720px;
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:22px;
-    padding:clamp(26px,4vw,52px);
-    box-shadow:0 24px 60px rgba(16,26,43,.08);
-  }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:26px;
-  }
-  .mark{
-    width:44px;height:44px;
-    border-radius:12px;
-    background:linear-gradient(135deg,var(--brand),#63a4ff);
-    display:grid;place-items:center;
-    color:#fff;
-    flex:0 0 auto;
-    box-shadow:0 10px 22px rgba(15,107,255,.28);
-  }
-  .mark svg{width:24px;height:24px;display:block}
-  .name{font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
-  .name span{color:var(--brand)}
-  h1{
-    font-size:clamp(1.7rem,3.6vw,2.5rem);
-    line-height:1.12;
-    letter-spacing:-.03em;
-    margin:0 0 14px;
-  }
-  p{
-    margin:0 0 12px;
-    color:var(--muted);
-    font-size:1.02rem;
-    line-height:1.65;
-  }
-  .divider{height:1px;background:var(--line);margin:26px 0}
-  .tag{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-size:.8rem;
-    font-weight:600;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    color:var(--brand-dark);
-    background:#eaf1ff;
-    border-radius:999px;
-    padding:7px 14px;
-    margin-bottom:18px;
-  }
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px rgba(15,107,255,.15)}
-  .fr{color:var(--muted);font-size:.96rem}
-  footer{margin-top:26px;font-size:.85rem;color:#8b98ad}
-  a{color:var(--brand-dark)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PaccoVeloce — Spedizioni di pacchi in tutta Italia</title>
+  <meta name="description" content="PaccoVeloce: spedizioni rapide e sicure in tutta Italia. Ritiro a domicilio, tracking in tempo reale e tariffe chiare.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="24" rx="5" fill="%230f2a3f"/><path d="M18 10 L26 14 L10 18 L18 22 Z" fill="%23ff6b1a"/></svg>'>
 </head>
 <body>
-  <main class="card">
-    <div class="brand">
-      <div class="mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 7.5 12 3l9 4.5v9L12 21 3 16.5z"/>
-          <path d="M3 7.5 12 12l9-4.5"/>
-          <path d="M12 12v9"/>
-        </svg>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="4" y="4" width="24" height="24" rx="5" fill="#ffffff"/>
+        <path d="M18 10 L26 14 L10 18 L18 22 Z" fill="#ff6b1a"/>
+      </svg>
+      <span>PaccoVeloce<span class="sub"><br>Spedizioni in Italia</span></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="Apri menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+    <nav class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="tarifs.html">Tariffe</a>
+      <a href="suivi.html">Tracking</a>
+      <a href="spedizioni.html">Le mie spedizioni</a>
+      <a href="contact.html">Contatti</a>
+    </nav>
+    <div class="nav-cta"><a href="https://wa.me/393508707243">Invia un pacco</a></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="badge">Consegna in tutta Italia 🇮🇹</span>
+        <h1>I tuoi pacchi, <em>veloci</em> e <em>sicuri</em>, ovunque in Italia.</h1>
+        <p>Ritiro a domicilio, tracking in tempo reale e tariffe trasparenti senza sorprese. Da Milano a Palermo, PaccoVeloce consegna per te.</p>
+        <div class="hero-actions">
+          <a class="btn" href="tarifs.html">Calcola il prezzo</a>
+          <a class="btn btn--ghost" href="https://wa.me/393508707243">Prenota via WhatsApp</a>
+        </div>
+        <div class="hero-meta">
+          <span>👍 4,9/5 su 2.300+ recensioni</span>
+          <span>⚡ Consegna in 24–48 h con Express</span>
+        </div>
+        <img class="hero-truck" src="assets/img/camion.svg" alt="Camion di consegna PaccoVeloce in viaggio verso tutta Italia" width="430" height="269">
       </div>
-      <div class="name">Pacco<span>Veloce</span></div>
+      <div class="hero-card">
+        <h3>📍 Traccia il tuo pacco</h3>
+        <p>Inserisci il numero di spedizione per seguire il viaggio del tuo pacco in tempo reale.</p>
+        <form id="hero-track-form" action="suivi.html" method="get" onsubmit="window.location.href='suivi.html?n='+encodeURIComponent(document.getElementById('hero-track-input').value);return false;">
+          <div class="field">
+            <input id="hero-track-input" type="text" placeholder="Es. PV12345678IT" aria-label="Numero di spedizione">
+          </div>
+          <button class="btn" type="submit">Traccia il pacco</button>
+        </form>
+        <p class="hero-note">Esempio di prova: <strong>PV12345678IT</strong></p>
+      </div>
     </div>
+  </div>
+</section>
 
-    <span class="tag"><span class="dot"></span>In preparazione</span>
+<section class="section">
+  <div class="container center">
+    <span class="badge">Come funziona</span>
+    <h2 class="section-title">Spedire non è mai stato così facile</h2>
+    <p class="section-sub center">Quattro passaggi, zero stress: gestisci tutto online, dal ritiro alla consegna.</p>
+  </div>
+  <div class="container">
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Prenota il ritiro</h3>
+        <p>Indica il tuo indirizzo e la fascia oraria che preferisci, in pochi click.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Prepara il pacco</h3>
+        <p>Il corriere lo ritira chiuso e pesato. Nessuna stampa necessaria: etichetta digitale.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Segui la spedizione</h3>
+        <p>Ricevi notifiche a ogni passo: ritiro, smistamento, transito e consegna.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3>Consegna confermata</h3>
+        <p>Il destinatario firma la ricezione e tu ricevi la conferma in tempo reale.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <h1>Il sito sta arrivando.</h1>
-    <p>Stiamo preparando le pagine di <strong>Pacco Veloce</strong>. Torna a trovarci tra poco: il sito sarà online a questo stesso indirizzo.</p>
+<section class="section section--grey">
+  <div class="container center">
+    <span class="badge">I nostri servizi</span>
+    <h2 class="section-title">Un servizio per ogni esigenza</h2>
+    <p class="section-sub center">Dall'occasione all'uso professionale: scegli il livello di velocità che preferisci.</p>
+  </div>
+  <div class="container">
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="icon">🕰️</div>
+        <h3>Standard</h3>
+        <p>Il classico conveniente per spedire senza fretta, con consegna tracciata in tutta Italia.</p>
+        <div class="delay">⏱ Consegna in 2–4 giorni lavorativi</div>
+        <div class="price">da 5,75 € <small>/ pacco</small></div>
+        <a class="btn" href="tarifs.html">Scopri le tariffe</a>
+      </div>
+      <div class="service-card">
+        <div class="icon">⚡</div>
+        <h3>Express</h3>
+        <p>Consegna prioritaria in 24–48 ore, con ritiro garantito e notifiche in tempo reale.</p>
+        <div class="delay">⏱ Consegna in 24–48 ore</div>
+        <div class="price">da 8,05 € <small>/ pacco</small></div>
+        <a class="btn" href="tarifs.html">Scopri le tariffe</a>
+      </div>
+      <div class="service-card">
+        <div class="icon">🏷️</div>
+        <h3>Economico</h3>
+        <p>La soluzione più economica per pacchi non urgenti: stessa affidabilità, prezzo minimo.</p>
+        <div class="delay">⏱ Consegna in 3–6 giorni lavorativi</div>
+        <div class="price">da 4,90 € <small>/ pacco</small></div>
+        <a class="btn" href="tarifs.html">Scopri le tariffe</a>
+      </div>
+      <div class="service-card">
+        <div class="icon">🚚</div>
+        <h3>Ritiro a domicilio</h3>
+        <p>Il corriere passa da casa tua o dal tuo negozio: tu non ti muovi, spedisci.</p>
+        <div class="delay">⏱ Fascia oraria a tua scelta</div>
+        <div class="price">da 1,50 € <small>/ ritiro</small></div>
+        <a class="btn" href="https://wa.me/393508707243">Prenota ora</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <div class="divider"></div>
+<section class="section">
+  <div class="container center">
+    <span class="badge">Cosa dicono i clienti</span>
+    <h2 class="section-title">La fiducia di migliaia di mittenti</h2>
+    <p class="section-sub center">Recensioni verificate provenienti da privati e piccole imprese in tutta Italia.</p>
+  </div>
+  <div class="container">
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>Spedisco ogni settimana da Verona a Palermo. Mai un pacco perso, e il tracking è sempre precisissimo.</blockquote>
+        <footer><img class="avatar" src="assets/img/avatar-marco.svg" alt="Avatar di Marco Ferretti" width="40" height="40"><span>Marco Ferretti — Negozio online, Verona</span></footer>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>Ho prenotato il ritiro alle 9 e alle 11 il corriere era già a casa. Il pacco è arrivato a Roma il giorno dopo.</blockquote>
+        <footer><img class="avatar" src="assets/img/avatar-giulia.svg" alt="Avatar di Giulia Romano" width="40" height="40"><span>Giulia Romano — Privata, Milano</span></footer>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★☆</div>
+        <blockquote>Tariffe chiare e senza sorprese: ho ricevuto il preventivo esatto prima di spedire. Servizio clienti reattivo.</blockquote>
+        <footer><img class="avatar" src="assets/img/avatar-antonio.svg" alt="Avatar di Antonio Bianchi" width="40" height="40"><span>Antonio Bianchi — Piccola impresa, Bologna</span></footer>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <p class="fr"><strong>Version française —</strong> Le site <strong>Pacco Veloce</strong> est en cours de préparation. Il sera disponible à cette même adresse très prochainement.</p>
+<section class="section section--grey">
+  <div class="container center">
+    <span class="badge">Dietro le quinte</span>
+    <h2 class="section-title">Dentro PaccoVeloce</h2>
+    <p class="section-sub center">Magazzini, flotta e consegne: un'occhiata a come lavoriamo ogni giorno per i tuoi pacchi.</p>
+  </div>
+  <div class="container">
+    <div class="gallery-grid">
+      <figure class="gallery-card">
+        <img src="assets/img/entrepot.svg" alt="Magazzino PaccoVeloce con scaffali di colli e muleto" width="640" height="400">
+        <figcaption>
+          <h3>📦 Magazzini moderni</h3>
+          <p>Smistamento tracciato a ogni passaggio: ogni pacco è scansionato e protetto fino al caricamento.</p>
+        </figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/img/camion.svg" alt="Camion PaccoVeloce in consegna" width="640" height="400">
+        <figcaption>
+          <h3>🚚 Flotta dedicata</h3>
+          <p>Partenze quotidiane da Milano verso tutta Italia, con percorsi ottimizzati per consegne puntuali.</p>
+        </figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/img/colis-livres.svg" alt="Colli consegnati davanti a una porta con spunta verde" width="640" height="400">
+        <figcaption>
+          <h3>✅ Consegne confermate</h3>
+          <p>Firma del destinatario e notifica in tempo reale: migliaia di pacchi consegnati ogni settimana.</p>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
 
-    <footer>paccoveloce — GitHub Pages</footer>
-  </main>
+<section class="section" id="chi-siamo">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-wrap">
+        <div class="about-photo">
+          <img src="assets/img/profile.svg" alt="Alessandro Conti, fondatore di PaccoVeloce" width="480" height="480">
+        </div>
+      </div>
+      <div>
+        <span class="badge">La nostra storia</span>
+        <h2 class="section-title">Chi siamo</h2>
+        <p>PaccoVeloce nasce a Milano nel 2020 da un'idea semplice: spedire un pacco in tutta Italia deve essere <strong>veloce, trasparente e senza sorprese</strong>. Oggi il nostro team gestisce migliaia di spedizioni al mese, dal piccolo negozio al privato, con un'assistenza che risponde davvero.</p>
+        <blockquote class="about-quote">«Ogni pacco è una promessa. La manteniamo, giorno dopo giorno.»
+          <footer>— Alessandro Conti, fondatore di PaccoVeloce</footer>
+        </blockquote>
+        <div class="about-stats">
+          <div class="stat-chip"><strong>12.000+</strong><span>pacchi al mese</span></div>
+          <div class="stat-chip"><strong>98%</strong><span>consegne puntuali</span></div>
+          <div class="stat-chip"><strong>40+</strong><span>città servite</span></div>
+          <div class="stat-chip"><strong>4,9/5</strong><span>su 2.300+ recensioni</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section--dark cta-band">
+  <div class="container">
+    <h2>Pronto a spedire il tuo prossimo pacco ?</h2>
+    <p>Prezzo immediato, ritiro programmato e consegna garantita: comincia in meno di 2 minuti.</p>
+    <a class="btn btn--light" href="https://wa.me/393508707243">Prenota via WhatsApp</a>
+    <a class="btn btn--ghost" href="tarifs.html">Calcola il prezzo</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="index.html">
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="4" y="4" width="24" height="24" rx="5" fill="#ffffff"/>
+            <path d="M18 10 L26 14 L10 18 L18 22 Z" fill="#ff6b1a"/>
+          </svg>
+          <span>PaccoVeloce</span>
+        </a>
+        <p class="about">Servizio di spedizione pacchi su tutto il territorio italiano. Affidabilità, velocità e trasparenza a portata di click.</p>
+      </div>
+      <div>
+        <h4>Servizi</h4>
+        <ul>
+          <li><a href="tarifs.html">Tariffe e preventivo</a></li>
+          <li><a href="https://wa.me/393508707243">Prenota via WhatsApp</a></li>
+          <li><a href="suivi.html">Traccia il tuo pacco</a></li>
+          <li><a href="spedizioni.html">Le mie spedizioni</a></li>
+          <li><a href="contact.html">Assistenza clienti</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contatti</h4>
+        <ul>
+          <li>📱 WhatsApp: +39 350 870 7243</li>
+          <li>✉️ velocepacco653@gmail.com</li>
+          <li>📍 Via del Fontanile Arenato, 180</li>
+          <li>🕘 Lun–Dom, 8:00–20:00</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informazioni</h4>
+        <ul>
+          <li><a href="index.html#chi-siamo">Chi siamo</a></li>
+          <li><a href="admin.html">Area riservata</a></li>
+          <li><a href="#">Termini e condizioni</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Cookie policy</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="flag-strip"></div>
+  <div class="container footer-bottom">
+    © 2026 PaccoVeloce — <span class="flag">Spedizioni in tutta Italia</span>
+  </div>
+</footer>
+
+<script src="assets/js/form.js"></script>
 </body>
 </html>

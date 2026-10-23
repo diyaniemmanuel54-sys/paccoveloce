@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Colis livrés devant une porte avec validation verte">
+  <defs>
+    <linearGradient id="pvliv-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2f5f8"/>
+      <stop offset="1" stop-color="#e2e8ee"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="640" height="400" fill="url(#pvliv-bg)"/>
+  <!-- sol -->
+  <rect x="0" y="312" width="640" height="88" fill="#d8dee5"/>
+  <line x1="0" y1="312" x2="640" y2="312" stroke="#c2ccd6" stroke-width="3"/>
+  <!-- porte -->
+  <rect x="48" y="52" width="188" height="260" rx="8" fill="#b7c2cc"/>
+  <rect x="62" y="64" width="160" height="248" rx="6" fill="#0f2a3f"/>
+  <rect x="84" y="88" width="116" height="84" rx="6" fill="#163a56"/>
+  <rect x="84" y="192" width="116" height="92" rx="6" fill="#163a56"/>
+  <circle cx="204" cy="188" r="7" fill="#ff6b1a"/>
+  <!-- paillasson -->
+  <rect x="252" y="322" width="180" height="20" rx="10" fill="#b8c2cc" opacity="0.8"/>
+  <!-- colis livrés -->
+  <g stroke="#b5763f" stroke-width="1.5">
+    <rect x="300" y="210" width="170" height="102" rx="6" fill="#d9975e"/>
+    <rect x="322" y="148" width="126" height="62" rx="6" fill="#c98a4b"/>
+    <rect x="486" y="250" width="76" height="62" rx="6" fill="#e0a76b"/>
+    <rect x="240" y="266" width="58" height="46" rx="6" fill="#c98a4b"/>
+  </g>
+  <rect x="375" y="210" width="14" height="102" fill="#e8c692"/>
+  <rect x="377" y="148" width="12" height="62" fill="#e8c692"/>
+  <rect x="486" y="272" width="76" height="10" fill="#b5763f" opacity="0.55"/>
+  <!-- étiquette adresse -->
+  <rect x="318" y="240" width="54" height="36" rx="4" fill="#ffffff"/>
+  <rect x="326" y="250" width="38" height="6" rx="3" fill="#c2ccd6"/>
+  <rect x="326" y="262" width="26" height="6" rx="3" fill="#c2ccd6"/>
+  <!-- badge validé -->
+  <circle cx="452" cy="140" r="36" fill="#009246" stroke="#ffffff" stroke-width="7"/>
+  <path d="M434 141 L447 154 L472 124" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- pastille "Consegnato" -->
+  <rect x="300" y="330" width="150" height="38" rx="19" fill="#009246"/>
+  <text x="375" y="355" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Consegnato</text>
+  <!-- confettis -->
+  <g opacity="0.85">
+    <circle cx="508" cy="96" r="5" fill="#ff6b1a"/>
+    <circle cx="540" cy="140" r="4" fill="#009246"/>
+    <circle cx="520" cy="190" r="4" fill="#ce2b37"/>
+    <circle cx="560" cy="110" r="3" fill="#0f2a3f"/>
+    <rect x="470" y="70" width="12" height="5" rx="2" fill="#f5a623" transform="rotate(30 476 72)"/>
+    <rect x="556" y="170" width="12" height="5" rx="2" fill="#ff6b1a" transform="rotate(-20 562 172)"/>
+  </g>
+</svg>

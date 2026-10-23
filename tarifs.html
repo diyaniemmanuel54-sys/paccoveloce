@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tariffe — PaccoVeloce</title>
+  <meta name="description" content="Tariffe chiare e trasparenti per spedire pacchi in Italia. Calcola subito il prezzo della tua spedizione con PaccoVeloce.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="24" rx="5" fill="%230f2a3f"/><path d="M18 10 L26 14 L10 18 L18 22 Z" fill="%23ff6b1a"/></svg>'>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="4" y="4" width="24" height="24" rx="5" fill="#ffffff"/>
+        <path d="M18 10 L26 14 L10 18 L18 22 Z" fill="#ff6b1a"/>
+      </svg>
+      <span>PaccoVeloce<span class="sub"><br>Spedizioni in Italia</span></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="Apri menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="tarifs.html" class="active">Tariffe</a>
+      <a href="suivi.html">Tracking</a>
+      <a href="spedizioni.html">Le mie spedizioni</a>
+      <a href="contact.html">Contatti</a>
+    </nav>
+    <div class="nav-cta"><a href="https://wa.me/393508707243">Invia un pacco</a></div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Tariffe e preventivo</h1>
+    <p>Calcola il prezzo della tua spedizione in pochi secondi. Nessuna sorpresa: il prezzo mostrato è quello finale.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">🧮 Calcola il prezzo</h2>
+    <p class="section-sub">Indica peso, dimensioni e destinazione: otterrai un preventivo immediato.</p>
+  </div>
+  <div class="container">
+    <div class="quote-card">
+      <form id="quote-form" class="form-card" style="box-shadow:none;padding:22px;">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="quote-poids">Peso (kg)</label>
+            <input id="quote-poids" type="number" min="0.1" step="0.1" value="2">
+          </div>
+          <div class="form-group">
+            <label for="quote-zone">Zona di consegna</label>
+            <select id="quote-zone">
+              <option value="nord">Nord Italia</option>
+              <option value="centro">Centro Italia</option>
+              <option value="sud">Sud &amp; Isole</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="quote-longueur">Lunghezza (cm)</label>
+            <input id="quote-longueur" type="number" min="0" step="1" value="30" placeholder="30">
+          </div>
+          <div class="form-group">
+            <label for="quote-largeur">Larghezza (cm)</label>
+            <input id="quote-largeur" type="number" min="0" step="1" value="20" placeholder="20">
+          </div>
+          <div class="form-group">
+            <label for="quote-hauteur">Altezza (cm)</label>
+            <input id="quote-hauteur" type="number" min="0" step="1" value="15" placeholder="15">
+          </div>
+          <div class="form-group">
+            <label for="quote-valeur">Valore dichiarato (€) <span class="hint">— assicurazione opzionale</span></label>
+            <input id="quote-valeur" type="number" min="0" step="10" value="0" placeholder="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="quote-servizio">Servizio</label>
+          <select id="quote-servizio">
+            <option value="economico">Economico (3–6 giorni)</option>
+            <option value="standard" selected>Standard (2–4 giorni)</option>
+            <option value="express">Express (24–48 h)</option>
+          </select>
+        </div>
+        <button class="btn" type="submit" style="width:100%;">Calcola il prezzo</button>
+        <p class="hint" style="margin-top:10px;font-size:0.8rem;color:#5c6b77;">Prezzi IVA inclusa, solo a scopo dimostrativo. Peso max 30 kg per pacco.</p>
+      </form>
+      <div class="quote-result">
+        <h3>Il tuo preventivo</h3>
+        <ul class="quote-lines" id="quote-lines"></ul>
+        <div class="quote-total">
+          <div>
+            <span>Prezzo totale</span>
+            <small>zona : <span id="quote-zone-label">Centro Italia</span></small>
+          </div>
+          <span class="amount" id="quote-total-amount">—</span>
+        </div>
+        <p style="margin-top:18px;font-size:0.88rem;color:#5c6b77;">
+          💡 Compila il modulo e clicca « Calcola il prezzo » per vedere il dettaglio delle voci.
+        </p>
+        <a class="btn" href="https://wa.me/393508707243" style="width:100%;">Prenota questa spedizione</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--grey">
+  <div class="container">
+    <h2 class="section-title">📋 Esempi di prezzo indicativi</h2>
+    <p class="section-sub">Esempi per un pacco di 1 kg, IVA inclusa. Usa il calcolatore qui sopra per un preventivo preciso.</p>
+    <table class="price-table">
+      <thead>
+        <tr><th>Servizio</th><th class="num">Nord (es. Milano → Torino)</th><th class="num">Centro (es. Roma)</th><th class="num">Sud &amp; Isole (es. Palermo)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Economico</td><td class="num">4,90 €</td><td class="num">5,63 €</td><td class="num">6,62 €</td></tr>
+        <tr><td>Standard</td><td class="num">5,75 €</td><td class="num">6,61 €</td><td class="num">7,76 €</td></tr>
+        <tr><td>Express (24–48 h)</td><td class="num">8,05 €</td><td class="num">9,26 €</td><td class="num">10,87 €</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.85rem;color:#5c6b77;margin-top:12px;">
+      Oltre 5 kg: +0,60 €/kg per Standard ed Express, +0,45 €/kg per Economico.
+      Supplemento di 2,50 € se L+H+P &gt; 100 cm. Tariffe IVA inclusa — pacchi oltre 30 kg: contattaci per un preventivo dedicato.
+    </p>
+  </div>
+</section>
+
+<section class="section--dark cta-band">
+  <div class="container">
+    <h2>Il prezzo ti convince ?</h2>
+    <p>Prenota il ritiro ora: il corriere passa da casa tua nella fascia oraria che preferisci.</p>
+    <a class="btn btn--light" href="https://wa.me/393508707243">Prenota via WhatsApp</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="index.html">
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="4" y="4" width="24" height="24" rx="5" fill="#ffffff"/>
+            <path d="M18 10 L26 14 L10 18 L18 22 Z" fill="#ff6b1a"/>
+          </svg>
+          <span>PaccoVeloce</span>
+        </a>
+        <p class="about">Servizio di spedizione pacchi su tutto il territorio italiano. Affidabilità, velocità e trasparenza a portata di click.</p>
+      </div>
+      <div>
+        <h4>Servizi</h4>
+        <ul>
+          <li><a href="tarifs.html">Tariffe e preventivo</a></li>
+          <li><a href="https://wa.me/393508707243">Prenota via WhatsApp</a></li>
+          <li><a href="suivi.html">Traccia il tuo pacco</a></li>
+          <li><a href="spedizioni.html">Le mie spedizioni</a></li>
+          <li><a href="contact.html">Assistenza clienti</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contatti</h4>
+        <ul>
+          <li>📱 WhatsApp: +39 350 870 7243</li>
+          <li>✉️ velocepacco653@gmail.com</li>
+          <li>📍 Via del Fontanile Arenato, 180</li>
+          <li>🕘 Lun–Dom, 8:00–20:00</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informazioni</h4>
+        <ul>
+          <li><a href="index.html#chi-siamo">Chi siamo</a></li>
+          <li><a href="admin.html">Area riservata</a></li>
+          <li><a href="#">Termini e condizioni</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Cookie policy</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="flag-strip"></div>
+  <div class="container footer-bottom">
+    © 2026 PaccoVeloce — <span class="flag">Spedizioni in tutta Italia</span>
+  </div>
+</footer>
+
+<script src="assets/js/prezzi.js"></script>
+<script src="assets/js/quote.js"></script>
+<script src="assets/js/form.js"></script>
+</body>
+</html>

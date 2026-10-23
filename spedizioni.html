@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le mie spedizioni — PaccoVeloce</title>
+  <meta name="description" content="Consulta tutte le spedizioni registrate sul tuo dispositivo: numero di consignazione, stato aggiornato, costo stimato ed etichetta stampabile.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="24" rx="5" fill="%230f2a3f"/><path d="M18 10 L26 14 L10 18 L18 22 Z" fill="%23ff6b1a"/></svg>'>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="4" y="4" width="24" height="24" rx="5" fill="#ffffff"/>
+        <path d="M18 10 L26 14 L10 18 L18 22 Z" fill="#ff6b1a"/>
+      </svg>
+      <span>PaccoVeloce<span class="sub"><br>Spedizioni in Italia</span></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="Apri menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="tarifs.html">Tariffe</a>
+      <a href="suivi.html">Tracking</a>
+      <a href="spedizioni.html" class="active">Le mie spedizioni</a>
+      <a href="contact.html">Contatti</a>
+    </nav>
+    <div class="nav-cta"><a href="https://wa.me/393508707243">Invia un pacco</a></div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Le mie spedizioni</h1>
+    <p>Lo storico delle spedizioni registrate su questo dispositivo: stato aggiornato, costo stimato e etichetta stampabile. <em>Le nuove prenotazioni non sono più elencate qui: vengono inviate direttamente all'agenzia via e-mail.</em></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="sped-toolbar">
+      <div>
+        <h2 class="section-title" style="margin:0;">📦 Le tue spedizioni</h2>
+        <p class="section-sub" style="margin:6px 0 0;" id="sped-conteggio"></p>
+      </div>
+      <button type="button" class="btn btn--ghost" id="sped-svuota" style="display:none;">🗑 Svuota elenco</button>
+    </div>
+    <div id="spedizioni-list" class="sped-list">
+      <div class="sped-empty">
+        <div class="sped-empty-icon">📭</div>
+        <h3>Nessuna spedizione registrata</h3>
+        <p>Le spedizioni create con il modulo di prenotazione appariranno qui, con il loro stato in tempo reale.</p>
+        <a class="btn" href="https://wa.me/393508707243">Prenota il primo ritiro</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section--dark cta-band">
+  <div class="container">
+    <h2>Hai un pacco da spedire ?</h2>
+    <p>Numero di consignazione S10, tracking in tempo reale ed etichetta pronta da stampare.</p>
+    <a class="btn btn--light" href="https://wa.me/393508707243">Prenota via WhatsApp</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="index.html">
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="4" y="4" width="24" height="24" rx="5" fill="#ffffff"/>
+            <path d="M18 10 L26 14 L10 18 L18 22 Z" fill="#ff6b1a"/>
+          </svg>
+          <span>PaccoVeloce</span>
+        </a>
+        <p class="about">Servizio di spedizione pacchi su tutto il territorio italiano. Affidabilità, velocità e trasparenza a portata di click.</p>
+      </div>
+      <div>
+        <h4>Servizi</h4>
+        <ul>
+          <li><a href="tarifs.html">Tariffe e preventivo</a></li>
+          <li><a href="https://wa.me/393508707243">Prenota via WhatsApp</a></li>
+          <li><a href="suivi.html">Traccia il tuo pacco</a></li>
+          <li><a href="spedizioni.html">Le mie spedizioni</a></li>
+          <li><a href="contact.html">Assistenza clienti</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contatti</h4>
+        <ul>
+          <li>📱 WhatsApp: +39 350 870 7243</li>
+          <li>✉️ velocepacco653@gmail.com</li>
+          <li>📍 Via del Fontanile Arenato, 180</li>
+          <li>🕘 Lun–Dom, 8:00–20:00</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informazioni</h4>
+        <ul>
+          <li><a href="index.html#chi-siamo">Chi siamo</a></li>
+          <li><a href="admin.html">Area riservata</a></li>
+          <li><a href="#">Termini e condizioni</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Cookie policy</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="flag-strip"></div>
+  <div class="container footer-bottom">
+    © 2026 PaccoVeloce — <span class="flag">Spedizioni in tutta Italia</span>
+  </div>
+</footer>
+
+<script src="assets/js/prezzi.js"></script>
+<script src="assets/js/shipments.js"></script>
+<script src="assets/js/label.js"></script>
+<script src="assets/js/spedizioni.js"></script>
+</body>
+</html>

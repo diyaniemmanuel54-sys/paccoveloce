@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Avatar de Marco Ferretti">
+  <defs>
+    <clipPath id="avm-c"><circle cx="120" cy="120" r="116"/></clipPath>
+  </defs>
+  <circle cx="120" cy="120" r="116" fill="#dfe9f2"/>
+  <g clip-path="url(#avm-c)">
+    <path d="M40 244 C40 190 74 162 120 162 C166 162 200 190 200 244 Z" fill="#0f2a3f"/>
+    <path d="M104 166 L120 196 L136 166 L120 172 Z" fill="#ffffff"/>
+    <rect x="106" y="132" width="28" height="30" rx="11" fill="#e8b98d"/>
+    <ellipse cx="120" cy="112" rx="40" ry="43" fill="#e8b98d"/>
+    <path d="M80 106 C80 66 100 52 120 52 C140 52 160 66 160 106 C152 84 140 76 120 76 C100 76 88 84 80 106 Z" fill="#2b211c"/>
+    <rect x="92" y="102" width="17" height="5" rx="2.5" fill="#2b211c"/>
+    <rect x="131" y="102" width="17" height="5" rx="2.5" fill="#2b211c"/>
+    <circle cx="102" cy="118" r="4" fill="#22303c"/>
+    <circle cx="138" cy="118" r="4" fill="#22303c"/>
+    <path d="M102 134 Q120 146 138 134" fill="none" stroke="#a96b44" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <circle cx="120" cy="120" r="112" fill="none" stroke="#ffffff" stroke-width="6"/>
+</svg>

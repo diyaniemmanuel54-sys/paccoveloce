@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Portrait du fondateur de PaccoVeloce">
+  <defs>
+    <radialGradient id="pvliv-pbg" cx="0.5" cy="0.35" r="0.9">
+      <stop offset="0" stop-color="#eef5fa"/>
+      <stop offset="1" stop-color="#c9dbe9"/>
+    </radialGradient>
+    <clipPath id="pvliv-pclip">
+      <circle cx="240" cy="240" r="232"/>
+    </clipPath>
+  </defs>
+  <circle cx="240" cy="240" r="232" fill="url(#pvliv-pbg)"/>
+  <g clip-path="url(#pvliv-pclip)">
+    <!-- veste -->
+    <path d="M104 484 C104 386 162 332 240 332 C318 332 376 386 376 484 Z" fill="#163a56"/>
+    <!-- chemise -->
+    <path d="M212 336 L240 398 L268 336 L240 348 Z" fill="#ffffff"/>
+    <!-- revers -->
+    <path d="M212 336 L240 398 L214 416 Z" fill="#0f2a3f"/>
+    <path d="M268 336 L240 398 L266 416 Z" fill="#0f2a3f"/>
+    <!-- cravate orange -->
+    <path d="M240 372 L250 384 L244 448 L240 460 L236 448 L230 384 Z" fill="#ff6b1a"/>
+    <!-- cou -->
+    <rect x="220" y="292" width="40" height="52" rx="16" fill="#f0c39a"/>
+    <rect x="220" y="292" width="40" height="20" rx="10" fill="#dfae85" opacity="0.7"/>
+    <!-- oreilles -->
+    <circle cx="166" cy="236" r="13" fill="#f6cfa4"/>
+    <circle cx="314" cy="236" r="13" fill="#f6cfa4"/>
+    <!-- visage -->
+    <ellipse cx="240" cy="230" rx="76" ry="82" fill="#f6cfa4"/>
+    <!-- cheveux -->
+    <path d="M160 232 C156 148 196 112 240 112 C284 112 324 148 320 232 C316 190 296 162 240 162 C184 162 164 190 160 232 Z" fill="#40302a"/>
+    <!-- sourcils -->
+    <rect x="192" y="210" width="32" height="9" rx="4.5" fill="#40302a"/>
+    <rect x="256" y="210" width="32" height="9" rx="4.5" fill="#40302a"/>
+    <!-- yeux -->
+    <circle cx="208" cy="238" r="7" fill="#22303c"/>
+    <circle cx="272" cy="238" r="7" fill="#22303c"/>
+    <!-- nez -->
+    <path d="M240 244 C236 256 234 262 240 268 C244 271 248 270 250 266" fill="none" stroke="#dfa678" stroke-width="5" stroke-linecap="round"/>
+    <!-- sourire -->
+    <path d="M212 286 Q240 306 268 286" fill="none" stroke="#a96b44" stroke-width="6" stroke-linecap="round"/>
+    <!-- joues -->
+    <circle cx="184" cy="262" r="11" fill="#f3b28a" opacity="0.55"/>
+    <circle cx="296" cy="262" r="11" fill="#f3b28a" opacity="0.55"/>
+  </g>
+  <circle cx="240" cy="240" r="226" fill="none" stroke="#ffffff" stroke-width="12"/>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Camion de livraison PaccoVeloce">
+  <!-- ombre au sol -->
+  <ellipse cx="320" cy="330" rx="262" ry="14" fill="rgba(15,42,63,0.12)"/>
+  <!-- route -->
+  <rect x="30" y="316" width="580" height="7" rx="3.5" fill="#8a97a3"/>
+  <rect x="60" y="333" width="90" height="6" rx="3" fill="#ff6b1a" opacity="0.85"/>
+  <rect x="180" y="333" width="90" height="6" rx="3" fill="#8a97a3" opacity="0.5"/>
+  <rect x="300" y="333" width="90" height="6" rx="3" fill="#ff6b1a" opacity="0.55"/>
+  <rect x="420" y="333" width="90" height="6" rx="3" fill="#8a97a3" opacity="0.5"/>
+  <rect x="540" y="333" width="70" height="6" rx="3" fill="#ff6b1a" opacity="0.35"/>
+  <!-- lignes de vitesse -->
+  <rect x="16" y="140" width="66" height="8" rx="4" fill="#ff6b1a" opacity="0.75"/>
+  <rect x="4" y="172" width="50" height="8" rx="4" fill="#8a97a3" opacity="0.6"/>
+  <rect x="26" y="204" width="40" height="8" rx="4" fill="#8a97a3" opacity="0.35"/>
+  <!-- châssis -->
+  <rect x="88" y="262" width="448" height="18" rx="6" fill="#22303c"/>
+  <!-- colis sur le toit -->
+  <g transform="translate(140,42)">
+    <rect x="0" y="0" width="56" height="46" rx="6" fill="#d9975e" stroke="#b5763f" stroke-width="2"/>
+    <rect x="24" y="0" width="8" height="46" fill="#e8c692"/>
+    <rect x="0" y="19" width="56" height="8" fill="#b5763f" opacity="0.55"/>
+  </g>
+  <!-- caisse de chargement -->
+  <rect x="88" y="88" width="300" height="180" rx="14" fill="#0f2a3f" stroke="#1d4160" stroke-width="3"/>
+  <rect x="88" y="246" width="300" height="8" fill="#ff6b1a" opacity="0.9"/>
+  <!-- logo + nom sur la caisse -->
+  <g transform="translate(116,136)">
+    <rect x="0" y="0" width="44" height="44" rx="10" fill="#ff6b1a"/>
+    <g transform="scale(1.375)">
+      <path d="M18 10 L26 14 L10 18 L18 22 Z" fill="#ffffff"/>
+    </g>
+  </g>
+  <text x="174" y="166" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#ffffff">PaccoVeloce</text>
+  <text x="176" y="192" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#9fb4c4" letter-spacing="1">SPEDIZIONI IN ITALIA</text>
+  <!-- cabine -->
+  <path d="M388 268 L388 100 Q388 88 400 88 L468 88 Q480 88 486 98 L516 148 Q536 156 536 176 L536 252 Q536 268 520 268 Z" fill="#ff6b1a"/>
+  <path d="M404 112 L460 112 Q468 112 472 119 L492 150 L404 150 Z" fill="#cfe6f5"/>
+  <line x1="404" y1="112" x2="404" y2="262" stroke="#e85d0f" stroke-width="3"/>
+  <rect x="414" y="168" width="16" height="6" rx="3" fill="#b34a0c"/>
+  <rect x="522" y="200" width="14" height="16" rx="4" fill="#ffd76b"/>
+  <rect x="378" y="104" width="8" height="22" rx="4" fill="#e85d0f"/>
+  <rect x="504" y="250" width="36" height="12" rx="5" fill="#22303c"/>
+  <!-- roues -->
+  <circle cx="170" cy="282" r="34" fill="#22303c"/>
+  <circle cx="170" cy="282" r="16" fill="#9aa7b1"/>
+  <circle cx="170" cy="282" r="6" fill="#5c6b77"/>
+  <circle cx="452" cy="282" r="34" fill="#22303c"/>
+  <circle cx="452" cy="282" r="16" fill="#9aa7b1"/>
+  <circle cx="452" cy="282" r="6" fill="#5c6b77"/>
+</svg>
