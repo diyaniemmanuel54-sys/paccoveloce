@@ -123,9 +123,8 @@
     if (mappaCorrente) { mappaCorrente.remove(); mappaCorrente = null; }
 
     if (typeof L === "undefined") {
-      cont.innerHTML = '<div class="map-fallback">\uD83D\uDDFA\uFE0F Carta non disponibile: ' +
-        "per visualizzare la mappa serve una connessione a internet (OpenStreetMap).</div>";
-      return;
+      return mappaSchematica(cont, origine, destinazione, pos, idx, popups,
+        "OpenStreetMap non disponibile su questa rete: percorso mostrato in forma schematica.");
     }
 
     var iconaPacco = L.divIcon({
@@ -139,12 +138,33 @@
       iconSize: [30, 30], iconAnchor: [15, 28]
     });
 
+    /* Retire le fond quadrillé éventuellement laissé par la carte schématique */
+    cont.style.backgroundColor = "";
+    cont.style.backgroundImage = "";
+    cont.style.backgroundSize = "";
+
     var map = L.map(cont, { scrollWheelZoom: false });
     mappaCorrente = map;
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19, attribution: "\u00A9 OpenStreetMap"
-    }).addTo(map);
+    var couche = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19, attribution: "\u00A9 OpenStreetMap", crossOrigin: true
+    });
+
+    /* Si aucune tuile ne se charge (réseau restreint, filtrage,
+       hors ligne), on bascule sur la carte schématique locale. */
+    var tuilesOk = 0, tuilesErr = 0, bascule = false;
+    couche.on("tileload", function () { tuilesOk++; });
+    couche.on("tileerror", function () {
+      tuilesErr++;
+      if (!bascule && tuilesOk === 0 && tuilesErr >= 4) {
+        bascule = true;
+        setTimeout(function () {
+          mappaSchematica(cont, origine, destinazione, pos, idx, popups,
+            "OpenStreetMap non raggiungibile da questa rete: percorso mostrato in forma schematica.");
+        }, 0);
+      }
+    });
+    couche.addTo(map);
 
     var distTot = distanzaKm(origine, destinazione);
     var distRest = idx >= 5 ? 0 : distanzaKm(pos, destinazione);
@@ -182,12 +202,110 @@
       ]), { padding: [45, 45] });
     } catch (e) {}
 
+    /* Conteneur parfois encore masqué (routeur du fichier unique,
+       mobile) : Leaflet calcule alors une taille nulle → carte vide. */
+    setTimeout(function () {
+      try { map.invalidateSize(); } catch (eInv) {}
+      try {
+        map.fitBounds(L.latLngBounds([
+          [origine.lat, origine.lng],
+          [destinazione.lat, destinazione.lng],
+          [pos.lat, pos.lng]
+        ]), { padding: [45, 45] });
+      } catch (eFit) {}
+    }, 200);
+
     return { distTot: distTot, distRest: distRest };
   }
 
   function fallbackMappa(cont, messaggio) {
     if (mappaCorrente) { mappaCorrente.remove(); mappaCorrente = null; }
     cont.innerHTML = '<div class="map-fallback">' + esc(messaggio) + "</div>";
+  }
+
+  function pausa(ms) {
+    return new Promise(function (resolve) { setTimeout(resolve, ms); });
+  }
+
+  /* ---------- Carte schématique (secours 100 % local) ----------
+     Affichée quand OpenStreetMap est injoignable (tuiles bloquées,
+     réseau restreint, hors ligne, CDN indisponible) : le trajet, les
+     villes et la distance restent lisibles sans aucune dépendance. */
+
+  function mappaSchematica(cont, origine, destinazione, pos, idx, popups, motivo) {
+    if (!cont) return null;
+    if (mappaCorrente) { mappaCorrente.remove(); mappaCorrente = null; }
+
+    var distTot = distanzaKm(origine, destinazione);
+    var distRest = idx >= 5 ? 0 : distanzaKm(pos, destinazione);
+    var frac = distTot > 0 ? 1 - distRest / distTot : 0;
+    frac = Math.max(0, Math.min(1, frac));
+
+    var W = 640, H = 380;
+    var x0 = 92, y0 = 168, x1 = W - 92, y1 = 168;
+    var cx = W / 2, cy = 74;
+
+    function punto(u) {
+      var a = (1 - u) * (1 - u), b = 2 * (1 - u) * u, c = u * u;
+      return [a * x0 + b * cx + c * x1, a * y0 + b * cy + c * y1];
+    }
+
+    var trajet = "M" + x0 + " " + y0 + " Q" + cx + " " + cy + " " + x1 + " " + y1;
+
+    var punti = [];
+    for (var i = 0; i <= 28; i++) {
+      var pt = punto(frac + (1 - frac) * (i / 28));
+      punti.push(pt[0].toFixed(1) + " " + pt[1].toFixed(1));
+    }
+    var resto = "M" + punti.join(" L");
+    var pacco = punto(frac);
+    var px = pacco[0].toFixed(1), py = pacco[1].toFixed(1);
+
+    var svg = "";
+    svg += '<svg class="pv-map-svg" viewBox="0 0 ' + W + " " + H + '" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mappa schematica del percorso">';
+    svg += '<path d="' + trajet + '" fill="none" stroke="#9aa8b5" stroke-width="2.5" stroke-dasharray="5 9" stroke-linecap="round"/>';
+    if (idx < 5) {
+      svg += '<path d="' + resto + '" fill="none" stroke="#ff6b1a" stroke-width="4" stroke-linecap="round"/>';
+    }
+
+    svg += '<circle cx="' + x0 + '" cy="' + y0 + '" r="10" fill="#163a56"/>';
+    svg += '<circle cx="' + x0 + '" cy="' + y0 + '" r="3.5" fill="#ffffff"/>';
+    svg += '<circle cx="' + x1 + '" cy="' + y1 + '" r="12" fill="#ffffff" stroke="#ff6b1a" stroke-width="3"/>';
+    svg += '<circle cx="' + x1 + '" cy="' + y1 + '" r="4.5" fill="#ff6b1a"/>';
+
+    if (idx < 5) {
+      var ex = parseFloat(px), ey = parseFloat(py);
+      svg += '<circle cx="' + px + '" cy="' + py + '" r="23" fill="#ff6b1a" fill-opacity="0.16"/>';
+      svg += '<circle cx="' + px + '" cy="' + py + '" r="16" fill="#ff6b1a"/>';
+      /* petit colis blanc dessiné (l'emoji ne s'affiche pas dans un SVG) */
+      svg += '<rect x="' + (ex - 8).toFixed(1) + '" y="' + (ey - 6.5).toFixed(1) + '" width="16" height="13" rx="1.8" fill="#ffffff"/>';
+      svg += '<rect x="' + (ex - 8).toFixed(1) + '" y="' + (ey - 6.5).toFixed(1) + '" width="16" height="4" rx="1.8" fill="#ffe0cc"/>';
+      svg += '<line x1="' + ex.toFixed(1) + '" y1="' + (ey - 6.5).toFixed(1) + '" x2="' + ex.toFixed(1) + '" y2="' + (ey + 6.5).toFixed(1) + '" stroke="#ff6b1a" stroke-width="1.4"/>';
+    }
+
+    svg += '<text x="' + x0 + '" y="' + (y0 + 42) + '" text-anchor="middle" font-family="system-ui,sans-serif" font-size="17" font-weight="700" fill="#163a56">' + esc(popups.origineCitta) + "</text>";
+    svg += '<text x="' + x0 + '" y="' + (y0 + 64) + '" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#5c6b77">Partenza</text>';
+    svg += '<text x="' + x1 + '" y="' + (y1 + 46) + '" text-anchor="middle" font-family="system-ui,sans-serif" font-size="17" font-weight="700" fill="#163a56">' + esc(popups.destCitta) + "</text>";
+    svg += '<text x="' + x1 + '" y="' + (y1 + 68) + '" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#5c6b77">Destinazione</text>';
+
+    svg += '<text x="' + (W / 2) + '" y="' + (H - 48) + '" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#5c6b77">Percorso totale: <tspan font-weight="700" fill="#163a56">' + formatKm(distTot) + " km</tspan></text>";
+    svg += '<text x="' + (W / 2) + '" y="' + (H - 26) + '" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#5c6b77">Distanza rimanente: <tspan font-weight="700" fill="#ff6b1a">' + formatKm(distRest) + " km</tspan></text>";
+    svg += "</svg>";
+
+    cont.innerHTML = svg;
+
+    /* Fond quadrillé plein cadre (le SVG garde ses proportions) */
+    cont.style.backgroundColor = "#f4f7fa";
+    cont.style.backgroundImage = "linear-gradient(#e6ecf2 1px, transparent 1px), linear-gradient(90deg, #e6ecf2 1px, transparent 1px)";
+    cont.style.backgroundSize = "40px 40px";
+
+    cont.classList.remove("leaflet-container", "leaflet-touch", "leaflet-fade-anim", "leaflet-grab");
+    cont.removeAttribute("tabindex");
+
+    var notaSchema = document.getElementById("map-note");
+    if (notaSchema && motivo) notaSchema.textContent = motivo;
+
+    return { distTot: distTot, distRest: distRest, schematic: true };
   }
 
   /* ---------- Géocodage réel (Nominatim / OpenStreetMap) ---------- */
@@ -339,7 +457,13 @@
     }
 
     var contMappa = document.getElementById("track-map");
-    Promise.all([geocoda(sped.mittente), geocoda(sped.destinatario)]).then(function (res) {
+    /* Deux requêtes Nominatim simultanées violent sa politique d'usage
+       (1 req/s) et se font refuser : on les enchaîne avec une pause. */
+    geocoda(sped.mittente).then(function (o) {
+      return pausa(1200)
+        .then(function () { return geocoda(sped.destinatario); })
+        .then(function (d) { return [o, d]; });
+    }).then(function (res) {
       var origine = res[0], destinazione = res[1];
       var nota = document.getElementById("map-note");
       if (!origine || !destinazione) {
@@ -357,9 +481,12 @@
         destCitta: esc(sped.destinatario.citta)
       });
       if (nota && dist) {
-        nota.innerHTML = "\uD83D\uDDFA\uFE0F Posizione attuale del pacco (\uD83D\uDCE6) e destinazione (\uD83D\uDCCD). " +
-          "Linea grigia: percorso totale (" + formatKm(dist.distTot) + " km) — linea arancione: distanza rimanente (" +
-          formatKm(dist.distRest) + " km).";
+        nota.innerHTML = dist.schematic
+          ? "\uD83D\uDDFA\uFE0F Mappa schematica (OpenStreetMap non raggiungibile). Percorso totale (" +
+            formatKm(dist.distTot) + " km) — linea arancione: distanza rimanente (" + formatKm(dist.distRest) + " km)."
+          : "\uD83D\uDDFA\uFE0F Posizione attuale del pacco (\uD83D\uDCE6) e destinazione (\uD83D\uDCCD). " +
+            "Linea grigia: percorso totale (" + formatKm(dist.distTot) + " km) — linea arancione: distanza rimanente (" +
+            formatKm(dist.distRest) + " km).";
       }
     });
 

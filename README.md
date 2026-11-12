@@ -126,7 +126,7 @@ l'agence, avec toutes les informations déjà rédigées.
   - **géocodage réel des adresses** via l'API **Nominatim**
     (OpenStreetMap, CORS ouvert, timeout 6 s, mise en cache locale clé
     `pv_geocode_v1`) — carte à l'échelle du trajet réel ;
-  - **carte OpenStreetMap** (Leaflet via CDN) avec la position actuelle
+  - **carte OpenStreetMap** (Leaflet servi en local) avec la position actuelle
     du colis 📦, la destination 📍, le trajet complet et la ligne de la
     **distance restante** en km (formule haversine) ;
   - la position du colis est interpolée selon le temps écoulé depuis la
@@ -144,10 +144,18 @@ l'agence, avec toutes les informations déjà rédigées.
 - **Anti-spam honeypot** : champ piège invisible (`left:-9999px`,
   `tabindex=-1`) sur les formulaires ; s'il est rempli, l'envoi est
   ignoré silencieusement (aucun message, formulaire réinitialisé).
-- **Carte** : les tuiles OSM, Leaflet et le géocodage Nominatim sont
-  chargés depuis un CDN/service public : une connexion internet est
-  nécessaire pour l'affichage de la carte (le reste du site fonctionne
-  hors ligne).
+- **Carte** (`assets/js/tracking.js`, `assets/vendor/leaflet/`)
+  - **Leaflet est servi par le projet** (`assets/vendor/leaflet/`), plus par
+    un CDN : un réseau qui bloque unpkg ne casse plus la carte ;
+  - tuiles OpenStreetMap + géocodage Nominatim (2 requêtes **séquentielles**,
+    espacées de 1,2 s, pour respecter la limite d'1 req/s) avec cache
+    `pv_geocode_v1` et repli sur les coordonnées de la ville ;
+  - **carte schématique de secours 100 % locale** (SVG) : si Leaflet ne
+    charge pas ou si aucune tuile ne s'affiche (filtrage, hors ligne),
+    le trajet, les villes et la distance restent visibles ;
+  - `map.invalidateSize()` + re-cadrage après affichage, pour éviter la
+    carte vide quand le conteneur était encore masqué (mobile, routeur
+    du fichier unique).
 - **Formulaires** : validation en temps réel, messages d'erreur, champs
   structurés (via / città / CAP / provincia) pour expéditeur et destinataire.
 - **Illustrations** (`assets/img/`) : visuels SVG vectoriels maison aux
@@ -175,6 +183,8 @@ PaccoVeloce/
 │   │   ├── entrepot.svg      # entrepôt avec rayonnages et chariot élévateur
 │   │   ├── colis-livres.svg  # colis livrés devant une porte (badge « Consegnato »)
 │   │   └── avatar-*.svg      # avatars illustrés des témoignages (3)
+│   ├── vendor/
+│   │   └── leaflet/      # Leaflet 1.9.4 servi en local (js, css, images)
 │   └── js/
 │       ├── prezzi.js     # modèle tarifaire partagé (API PV_Prezzi)
 │       ├── form.js       # validation, confirmation, devis en direct, honeypot

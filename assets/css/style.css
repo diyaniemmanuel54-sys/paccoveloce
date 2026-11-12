@@ -707,6 +707,11 @@ input.invalid, select.invalid, textarea.invalid {
   overflow: hidden;
   margin-top: 18px;
 }
+.pv-map-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .map-fallback {
   display: grid;
   place-items: center;
