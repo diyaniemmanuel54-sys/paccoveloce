@@ -152,17 +152,38 @@
       "Creato il": sped.creatoIl
     };
     if (typeof fetch !== "function") { callback(false); return; }
+
+    /* Garde-fou : FormSubmit peut ne jamais répondre (réseau bloqué,
+       opérateur, service lent). Sans délai maximum, l'utilisateur
+       restait bloqué sur « Invio in corso… » et ne voyait JAMAIS son
+       numéro. On plafonne donc l'attente et on rend la main. */
+    var finito = false;
+    var minuteur = null;
+    function concludi(ok, motivo) {
+      if (finito) return;
+      finito = true;
+      if (minuteur) clearTimeout(minuteur);
+      callback(ok, motivo || "");
+    }
+
+    var ctrl = (typeof AbortController === "function") ? new AbortController() : null;
+    minuteur = setTimeout(function () {
+      if (ctrl) { try { ctrl.abort(); } catch (eAbort) {} }
+      concludi(false, "timeout");
+    }, 12000);
+
     fetch("https://formsubmit.co/ajax/" + EMAIL_AGENZIA, {
       method: "POST",
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify(messaggio)
+      body: JSON.stringify(messaggio),
+      signal: ctrl ? ctrl.signal : undefined
     })
       .then(function (risposta) { return risposta.json(); })
       .then(function (dati) {
         var ok = !!dati && (dati.success === "true" || dati.success === true);
-        callback(ok, ok ? "" : ((dati && dati.message) || ""));
+        concludi(ok, ok ? "" : ((dati && dati.message) || ""));
       })
-      .catch(function () { callback(false, "network"); });
+      .catch(function () { concludi(false, "network"); });
   }
 
   /* Repli : lien e-mail prérempli si l'envoi automatique échoue. */
@@ -219,6 +240,57 @@
     });
   }
 
+  /* ---------- Partage : lien de suivi autonome ----------
+     Le lien contient les données non nominatives du colis : il
+     fonctionne sur n'importe quel téléphone, même si le registre
+     en ligne est indisponible. C'est la garantie côté client. */
+
+  function soloCifre(tel) {
+    var d = String(tel || "").replace(/[^0-9]/g, "");
+    if (d.indexOf("00") === 0) d = d.slice(2);
+    return d;
+  }
+
+  function bloccoCondivisione(sped) {
+    var lien = (window.PV_API && window.PV_API.lienSuivi) ? window.PV_API.lienSuivi(sped) : "";
+    if (!lien) return "";
+
+    var tel = soloCifre(sped.destinatario && sped.destinatario.telefono) || "393508707243";
+    var msg = "PaccoVeloce — spedizione " + sped.numero +
+      ". Segui il tuo pacco da qualsiasi telefono: " + lien;
+    var wa = "https://wa.me/" + tel + "?text=" + encodeURIComponent(msg);
+
+    return "<div class='bc-share'>" +
+      "  <div class='bc-share-title'>\uD83D\uDD17 Link di tracciamento (funziona su qualsiasi telefono, senza registro online)</div>" +
+      "  <input class='bc-share-url' type='text' readonly value='" + lien.replace(/'/g, "&#39;") + "'>" +
+      "  <div class='bc-actions'>" +
+      "    <button type='button' class='btn bc-copia'>\uD83D\uDCCB Copia il link</button>" +
+      "    <a class='btn btn--ghost' href='" + wa + "' target='_blank' rel='noopener'>\uD83D\uDCAC Invia al destinatario</a>" +
+      "  </div>" +
+      "</div>";
+  }
+
+  function collegaCondivisione(conteneur) {
+    var btn = conteneur.querySelector(".bc-copia");
+    var champ = conteneur.querySelector(".bc-share-url");
+    if (!btn || !champ) return;
+
+    btn.addEventListener("click", function () {
+      var festeggia = function () {
+        btn.textContent = "\u2705 Link copiato";
+        setTimeout(function () { btn.textContent = "\uD83D\uDCCB Copia il link"; }, 2200);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(champ.value).then(festeggia).catch(function () {
+          try { champ.select(); document.execCommand("copy"); festeggia(); } catch (e) {}
+        });
+      } else {
+        try { champ.select(); document.execCommand("copy"); festeggia(); } catch (e) {}
+      }
+    });
+  }
+
   function afficherInvio(conteneur) {
     conteneur.innerHTML =
       "<div class='booking-confirm'>" +
@@ -246,15 +318,16 @@
       /* Il conteneur a pu être réaffiché : on relit la ligne courante */
       var cible = conteneur.querySelector("[data-online]");
       if (!cible) return;
-      if (ok && amministrazione) {
-        cible.innerHTML = "\uD83C\uDF10 <strong>Online</strong> — questo numero \u00E8 ora consultabile " +
-          "da qualsiasi dispositivo (clienti, smartphone, altri PC).";
-      } else if (ok) {
-        cible.innerHTML = "\uD83C\uDF10 <strong>Online</strong> — spedizione pubblicata nel registro condiviso.";
+      if (ok === "ok") {
+        cible.innerHTML = "\uD83C\uDF10 <strong>Online (verificato)</strong> — chiunque pu\u00F2 cercare questo numero " +
+          "da qualsiasi telefono o PC.";
+      } else if (ok === "unverified") {
+        cible.innerHTML = "\uD83C\uDF10 <strong>Pubblicato</strong> — il numero \u00E8 stato inviato al registro " +
+          "online; la rilettura di controllo non ha risposto (rete o cache). In caso di dubbio usa il link qui sotto.";
       } else {
-        cible.innerHTML = "\u26A0\uFE0F <strong>Pubblicazione online non riuscita</strong> — controlla la " +
-          "connessione a internet e riprova, oppure usa \u00AB Ripubblica registro online \u00BB nel pannello. " +
-          "Il numero resta valido solo su questo dispositivo.";
+        cible.innerHTML = "\u26A0\uFE0F <strong>Registro online non raggiungibile</strong> da questo dispositivo. " +
+          "Il numero funziona comunque: usa il <strong>link di tracciamento</strong> qui sotto, che non dipende da nessun servizio esterno. " +
+          "Puoi anche riprovare con \u00AB Ripubblica registro online \u00BB nell'Area riservata.";
       }
     });
   }
@@ -272,11 +345,16 @@
       "    <span class='bc-code'>" + sped.numero + "</span>" +
       "  </div>" +
       riepilogoHtml(sped) +
-      "  <p class='bc-note'>Conserva questo numero: ti servir\u00E0 per tracciare il pacco e sar\u00E0 comunicato anche al destinatario.</p>" +
+      (amministrazione
+        ? "  <p class='bc-note'>Conserva questo numero: \u00E8 gi\u00E0 attivo e tracciabile da qualsiasi telefono o PC.</p>"
+        : "  <p class='bc-note'>Conserva questo numero: sar\u00E0 attivo nel tracciamento appena l'agenzia registra la spedizione (di solito entro poche ore).</p>") +
       (amministrazione ? "  <p class='bc-note bc-online' data-online></p>" : "") +
+      (amministrazione ? "  <p class='bc-note bc-email' data-email>\uD83D\uDCE7 Invio del riepilogo all'agenzia in corso\u2026</p>" : "") +
+      (amministrazione ? bloccoCondivisione(sped) : "") +
       "  <button type='button' class='btn bc-pdf' style='margin-top:16px;'>\u2B07\uFE0F Scarica la ricevuta (PDF)</button>" +
       "</div>";
     collegaPulsantePdf(conteneur, sped);
+    if (amministrazione) collegaCondivisione(conteneur);
 
     if (amministrazione) pubblicaOnline(conteneur, sped, amministrazione);
   }
@@ -382,12 +460,28 @@
         form.style.display = "none";
         if (cible) {
           cible.classList.add("show");
-          afficherInvio(cible);
-          try { cible.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (eInvio) {}
-          inviaAdAgenzia(sped, function (inviato, messaggioServeur) {
-            if (inviato) afficherConfermaInvio(cible, sped, amministrazione);
-            else afficherErroreInvio(cible, sped, messaggioServeur);
-          });
+          if (amministrazione) {
+            /* Area riservata : il numero e il link di tracciamento sono
+               l'informazione utile, quindi compaiono SUBITO. L'e-mail
+               all'agenzia parte in secondo piano e il suo esito viene
+               scritto nella riga dedicata: nessuna attesa bloccante. */
+            afficherConfermaInvio(cible, sped, true);
+            try { cible.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (eInvio) {}
+            inviaAdAgenzia(sped, function (inviato) {
+              var riga = cible.querySelector("[data-email]");
+              if (!riga) return;
+              riga.innerHTML = inviato
+                ? "\uD83D\uDCE7 Riepilogo inviato all'agenzia (" + EMAIL_AGENZIA + ")."
+                : "\u26A0\uFE0F Riepilogo non inviato via e-mail (rete o servizio lento). Il numero e il link qui sopra sono comunque validi.";
+            });
+          } else {
+            afficherInvio(cible);
+            try { cible.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (eInvio2) {}
+            inviaAdAgenzia(sped, function (inviato, messaggioServeur) {
+              if (inviato) afficherConfermaInvio(cible, sped, amministrazione);
+              else afficherErroreInvio(cible, sped, messaggioServeur);
+            });
+          }
         }
         return;
       }

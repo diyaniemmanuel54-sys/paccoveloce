@@ -96,6 +96,40 @@
     });
   }
 
+  /* --- Diagnostic du registre en ligne -------------------------
+     Écrit puis relit un numéro de test depuis CET appareil : dit
+     si la publication en ligne fonctionne réellement ici. */
+  var btnTest = document.getElementById("btn-test-registro");
+
+  if (btnTest) {
+    btnTest.addEventListener("click", function () {
+      if (!window.PV_API || typeof window.PV_API.testRegistro !== "function") {
+        if (esitoRipubblica) esitoRipubblica.textContent = "⚠️ Modulo registro non caricato: ricarica la pagina.";
+        return;
+      }
+
+      btnTest.disabled = true;
+      if (esitoRipubblica) esitoRipubblica.textContent = "⏳ Verifica in corso…";
+
+      window.PV_API.testRegistro().then(function (r) {
+        btnTest.disabled = false;
+        if (!esitoRipubblica) return;
+
+        if (r && r.ok) {
+          esitoRipubblica.textContent = "✅ Registro online funzionante da questo dispositivo.";
+        } else if (r && r.motivo === "scrittura") {
+          esitoRipubblica.textContent = "⚠️ Scrittura rifiutata: il registro non accetta dati da questo dispositivo. Usa il link di tracciamento.";
+        } else if (r && r.motivo === "lettura") {
+          esitoRipubblica.textContent = "⚠️ Scrittura accettata ma rilettura fallita (rete o cache). Il numero può comunque funzionare: usa il link di tracciamento.";
+        } else if (r && r.motivo === "non-configurato") {
+          esitoRipubblica.textContent = "⚠️ Nessun registro configurato.";
+        } else {
+          esitoRipubblica.textContent = "⚠️ Registro non raggiungibile: controlla la connessione. Usa il link di tracciamento.";
+        }
+      });
+    });
+  }
+
   if (modulo && campo) {
     modulo.addEventListener("submit", function (e) {
       e.preventDefault();

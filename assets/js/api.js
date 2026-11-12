@@ -249,6 +249,62 @@
   }
 
   /* ============================================================
+     Lien de suivi autonome (aucun service externe)
+     ------------------------------------------------------------
+     Les données non nominatives du colis (villes, CAP, province,
+     service, poids, date) sont encodées en base64url dans l'URL :
+         suivi.html?d=…
+     Ce lien fonctionne sur n'importe quel téléphone, même si le
+     registre en ligne est indisponible, vidé ou bloqué par le
+     réseau de l'opérateur. C'est la voie de secours garantie.
+     ============================================================ */
+
+  function utf8VersBase64(txt) {
+    var i, bin = "";
+    if (window.TextEncoder) {
+      var octets = new TextEncoder().encode(txt);
+      for (i = 0; i < octets.length; i++) bin += String.fromCharCode(octets[i]);
+    } else {
+      bin = unescape(encodeURIComponent(txt));
+    }
+    return btoa(bin);
+  }
+
+  function base64VersUtf8(b64) {
+    var bin = atob(b64), i;
+    if (window.TextDecoder) {
+      var octets = new Uint8Array(bin.length);
+      for (i = 0; i < bin.length; i++) octets[i] = bin.charCodeAt(i);
+      return new TextDecoder().decode(octets);
+    }
+    return decodeURIComponent(escape(bin));
+  }
+
+  function codifica(rec) {
+    try {
+      var json = JSON.stringify(comprimi(rec));
+      return utf8VersBase64(json).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    } catch (e) { return ""; }
+  }
+
+  function decodifica(code) {
+    try {
+      var s = String(code || "").replace(/-/g, "+").replace(/_/g, "/");
+      while (s.length % 4) s += "=";
+      var obj = JSON.parse(base64VersUtf8(s));
+      if (!obj || !obj.n) return null;
+      return espandi(obj);
+    } catch (e) { return null; }
+  }
+
+  function lienSuivi(rec) {
+    var base = "https://paccoveloce.com/suivi.html";
+    if (!rec || !rec.numero) return base;
+    var d = codifica(rec);
+    return d ? base + "?d=" + d : base + "?n=" + encodeURIComponent(rec.numero);
+  }
+
+  /* ============================================================
      API publique
      ============================================================ */
 
@@ -264,10 +320,15 @@
     return Promise.resolve(false);
   }
 
-  /* Sauvegarde puis vérification par relecture (le POST "no-cors" ne
-     renvoie pas de statut ; le store public, lui, répond). */
+  /* Sauvegarde puis tentative de relecture.
+     Retourne :
+       "ok"         → écrit ET relu (certitude)
+       "unverified" → écrit, relecture impossible (cache CDN, réseau)
+       false        → écriture refusée / hors ligne
+     On ne transforme plus un doute de lecture en échec : cela
+     faisait croire à une panne alors que le numéro était publié. */
   function salvaEVerifica(rec, tentativi) {
-    var max = tentativi || 4;
+    var max = tentativi || 3;
 
     return salva(rec).then(function (ok) {
       if (!ok) return false;
@@ -276,16 +337,55 @@
       function essai() {
         n++;
         return cerca(rec.numero).then(function (t) {
-          if (t) return true;
-          if (n >= max) return false;
-          return pausa(1200).then(essai);
+          if (t) return "ok";
+          if (n >= max) return "unverified";
+          return pausa(1000).then(essai);
         }).catch(function () {
-          if (n >= max) return false;
-          return pausa(1200).then(essai);
+          if (n >= max) return "unverified";
+          return pausa(1000).then(essai);
         });
       }
       return essai();
-    });
+    }).catch(function () { return false; });
+  }
+
+  /* Supprime un enregistrement (utilisé par le test de diagnostic) */
+  function elimina(numero) {
+    if (!storeAttivo()) return Promise.resolve(false);
+    return impronta(numero).then(function (cle) {
+      return storeLeggi().then(function (dati) {
+        if (!(cle in dati)) return false;
+        delete dati[cle];
+        return storeScrivi(dati).then(function () { return true; });
+      });
+    }).catch(function () { return false; });
+  }
+
+  /* Diagnostic : écrit puis relit un numéro de test, et le supprime.
+     Permet de savoir depuis CET appareil si la publication en ligne
+     fonctionne réellement. */
+  function testRegistro() {
+    if (!storeAttivo() && !scriptAttivo()) {
+      return Promise.resolve({ ok: false, motivo: "non-configurato" });
+    }
+    var prova = {
+      numero: "PVTEST" + Date.now(),
+      creatoIl: new Date().toISOString(),
+      servizio: "standard",
+      peso: "1",
+      mittente: { citta: "Roma", cap: "00100", provincia: "RM" },
+      destinatario: { citta: "Milano", cap: "20100", provincia: "MI" }
+    };
+    return salva(prova).then(function (ok) {
+      if (!ok) return { ok: false, motivo: "scrittura" };
+      return cerca(prova.numero).then(function (t) {
+        return elimina(prova.numero).then(function () {
+          return t ? { ok: true, motivo: "ok" } : { ok: false, motivo: "lettura" };
+        });
+      }).catch(function () {
+        return { ok: false, motivo: "lettura" };
+      });
+    }).catch(function () { return { ok: false, motivo: "rete" }; });
   }
 
   function pubblicaTutti(liste) {
@@ -299,6 +399,11 @@
     cerca: cerca,
     salva: salva,
     salvaEVerifica: salvaEVerifica,
-    pubblicaTutti: pubblicaTutti
+    pubblicaTutti: pubblicaTutti,
+    codifica: codifica,
+    decodifica: decodifica,
+    lienSuivi: lienSuivi,
+    testRegistro: testRegistro,
+    elimina: elimina
   };
 })();

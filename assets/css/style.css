@@ -579,6 +579,34 @@ input.invalid, select.invalid, textarea.invalid {
 .bc-ligne strong { text-align: right; }
 
 .bc-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.bc-share {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #ffd9bf;
+  border-radius: 12px;
+  background: #fff8f2;
+}
+.bc-share-title {
+  font-weight: 700;
+  color: #163a56;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+.bc-share-url {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e2e8ee;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #163a56;
+  background: #fff;
+  margin-bottom: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.bc-share .bc-actions { margin-top: 0; }
+.bc-share .btn { flex: 1 1 auto; text-align: center; }
 .bc-note, .bc-warn { font-size: 0.82rem; color: var(--text-soft); margin: 12px 0 0 !important; }
 .bc-warn { color: #9a5a00; }
 

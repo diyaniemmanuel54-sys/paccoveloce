@@ -635,8 +635,8 @@
       "Verifica il codice oppure contatta l'agenzia su WhatsApp al +39 350 870 7243." +
       "</div>" +
       '<p class="map-note" style="margin-top:12px;">Se la spedizione è stata appena inserita, attendi un minuto e riprova. ' +
-      "Se il numero ti è stato consegnato prima dell'attivazione del tracciamento online, " +
-      "segnalalo all'agenzia: la attiverà in pochi secondi.</p>";
+      "Se il problema continua, chiedi all'agenzia il <strong>link diretto di tracciamento</strong> " +
+      "(funziona sempre, su qualsiasi telefono).</p>";
   }
 
   /* Le registre partagé n'a pas répondu (réseau, service indisponible) */
@@ -714,8 +714,22 @@
       afficher(numero);
     });
 
-    /* Lecture d'un éventuel paramètre ?n=... (confirmation de réservation) */
     var params = new URLSearchParams(window.location.search);
+
+    /* Lien de suivi autonome : ?d=… contient les données du colis.
+       Fonctionne sur n'importe quel appareil, sans registre en ligne. */
+    var paquet = params.get("d");
+    if (paquet && window.PV_API && window.PV_API.decodifica) {
+      var rec = window.PV_API.decodifica(paquet);
+      if (rec) {
+        var champD = document.getElementById("track-number");
+        if (champD) champD.value = rec.numero;
+        afficherReelle(rec);
+        return;
+      }
+    }
+
+    /* Lecture d'un éventuel paramètre ?n=... (confirmation de réservation) */
     var n = params.get("n");
     if (n) {
       var champ = document.getElementById("track-number");

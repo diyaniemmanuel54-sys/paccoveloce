@@ -207,9 +207,9 @@ PaccoVeloce/
 
 **Problème corrigé** : jusqu'ici le numéro généré dans l'Area riservata était
 écrit uniquement dans le `localStorage` du navigateur de l'agence. Le suivi
-fonctionnait donc **seulement sur ce navigateur** ; ailleurs, `tracking.js`
-bascule sur un rendu de démonstration (données fictives issues d'un hash du
-numéro) — d'où l'impression que « le code ne fonctionne pas pour les autres ».
+fonctionnait donc **seulement sur ce navigateur** — d'où l'impression que
+« le code ne fonctionne pas pour les autres ». (Aujourd'hui un numéro inconnu
+affiche « Spedizione non trovata » : plus aucun faux suivi de démonstration.)
 
 **Solution (active, zéro configuration)** : un espace de stockage JSON public
 et gratuit (`extendsclass.com/api/json-storage`) sert de registre central.
@@ -242,6 +242,23 @@ vérifiée par relecture avant d'afficher « 🌐 Online ».
 **Après génération** (Area riservata), la confirmation affiche l'état réel de
 la publication : « 🌐 Online — consultabile da qualsiasi dispositivo » ou un
 avertissement si le registre n'est pas configuré / injoignable.
+
+**Lien de suivi autonome — la garantie « marchent partout »** : la confirmation
+de l'Area riservata contient un champ **« Link di tracciamento »** (bouton
+« Copia il link » + bouton « Invia al destinatario » via WhatsApp). Ce lien a
+la forme :
+
+```
+https://paccoveloce.com/suivi.html?d=eyJuIjoiUFYzMTY...
+```
+
+Le paramètre `d` contient les données **non nominatives** du colis (numéro,
+service, poids, villes/CAP/provinces) encodées en base64url. `tracking.js`
+les décode et affiche directement la fiche complète : **aucun registre, aucun
+serveur, aucun `localStorage` n'est nécessaire**. Le lien fonctionne donc sur
+n'importe quel téléphone, même si le registre public est indisponible ou si
+le numéro n'a jamais été publié (anciens numéros). C'est le canal à envoyer
+au client ; le numéro seul reste utilisable via la recherche classique.
 
 **Données publiées (vie privée)** : l'espace est lisible publiquement, donc
 seules des données **non nominatives** y sont écrites : villes, CAP et
