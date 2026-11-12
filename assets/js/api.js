@@ -147,12 +147,28 @@
     });
   }
 
+  /* File d'attente des écritures.
+     Le registre est UN objet JSON : chaque écriture le lit en entier,
+     le modifie puis le réécrit en entier. Deux écritures simultanées
+     (deux téléphones, ou deux suppressions) repartaient de la même
+     version et la seconde écrasait la première → des numéros
+     disparaissaient du registre. On les exécute donc l'une après
+     l'autre, dans l'ordre d'arrivée. */
+  var fileEcriture = Promise.resolve();
+  function enFile(tache) {
+    var p = fileEcriture.then(tache, tache);
+    fileEcriture = p.then(function () {}, function () {});
+    return p;
+  }
+
   function storeSalva(rec) {
     if (!rec || !rec.numero) return Promise.resolve(false);
-    return impronta(rec.numero).then(function (cle) {
-      return storeLeggi().then(function (dati) {
-        dati[cle] = comprimi(rec);
-        return storeScrivi(dati).then(function () { return true; });
+    return enFile(function () {
+      return impronta(rec.numero).then(function (cle) {
+        return storeLeggi().then(function (dati) {
+          dati[cle] = comprimi(rec);
+          return storeScrivi(dati).then(function () { return true; });
+        });
       });
     }).catch(function () { return false; });
   }
@@ -168,7 +184,8 @@
 
   function storePubblicaTutti(liste) {
     if (!liste || !liste.length) return Promise.resolve(0);
-    return storeLeggi().then(function (dati) {
+    return enFile(function () {
+      return storeLeggi().then(function (dati) {
       var n = 0;
       return Promise.all(liste.map(function (rec) {
         if (!rec || !rec.numero) return Promise.resolve();
@@ -176,8 +193,9 @@
           dati[cle] = comprimi(rec);
           n++;
         });
-      })).then(function () {
-        return storeScrivi(dati).then(function () { return n; });
+        })).then(function () {
+          return storeScrivi(dati).then(function () { return n; });
+        });
       });
     });
   }
@@ -352,11 +370,13 @@
   /* Supprime un enregistrement (utilisé par le test de diagnostic) */
   function elimina(numero) {
     if (!storeAttivo()) return Promise.resolve(false);
-    return impronta(numero).then(function (cle) {
-      return storeLeggi().then(function (dati) {
-        if (!(cle in dati)) return false;
-        delete dati[cle];
-        return storeScrivi(dati).then(function () { return true; });
+    return enFile(function () {
+      return impronta(numero).then(function (cle) {
+        return storeLeggi().then(function (dati) {
+          if (!(cle in dati)) return false;
+          delete dati[cle];
+          return storeScrivi(dati).then(function () { return true; });
+        });
       });
     }).catch(function () { return false; });
   }

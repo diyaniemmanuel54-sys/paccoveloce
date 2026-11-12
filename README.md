@@ -223,6 +223,13 @@ Aucune inscription, aucune clé d'API, aucun réglage : la publication part
 automatiquement à chaque numéro généré dans l'Area riservata, puis elle est
 vérifiée par relecture avant d'afficher « 🌐 Online ».
 
+**Écritures sérialisées** : le registre est un objet JSON unique, lu puis
+réécrit en entier. Deux écritures simultanées (deux téléphones, ou deux
+suppressions) repartaient de la même version et la seconde écrasait la
+première — un numéro pouvait disparaître. `api.js` fait donc passer toutes
+les écritures (`salva`, `pubblicaTutti`, `elimina`) dans une file d'attente
+`enFile()`, exécutée strictement dans l'ordre d'arrivée.
+
 | Fichier | Rôle |
 |---|---|
 | `assets/js/api-config.js` | URL du registre public (`PV_STORE_URL`) et, facultatif, `PV_API_URL` |
