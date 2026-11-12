@@ -47,7 +47,7 @@
         <div class="form-group">
           <label for="track-number">Numero di spedizione</label>
           <input id="track-number" type="text" placeholder="PV12345678IT" autocomplete="off">
-          <p class="hint">Formato: PV + numeri (+ IT opzionale). Esempio di prova: <strong>PV12345678IT</strong>. Il risultato mostra mittente, destinatario, indirizzo di consegna e la mappa del tragitto.</p>
+          <p class="hint">Inserisci il numero ricevuto dall'agenzia (formato <strong>PV</strong> + cifre, ad esempio PV316255987IT). Il risultato mostra mittente, destinatario, indirizzo di consegna e la mappa del tragitto.</p>
         </div>
         <button class="btn" type="submit" style="width:100%;">Traccia il pacco</button>
       </form>
@@ -131,6 +131,8 @@
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="assets/js/api-config.js"></script>
+<script src="assets/js/api.js"></script>
 <script src="assets/js/shipments.js"></script>
 <script src="assets/js/label.js"></script>
 <script src="assets/js/tracking.js"></script>

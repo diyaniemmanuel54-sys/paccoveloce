@@ -184,9 +184,51 @@ PaccoVeloce/
 │       ├── label.js      # étiquette A4 imprimable + code-barres Code 128
 │       ├── ricevuta.js   # reçu de réservation en PDF (généré dans le navigateur)
 │       ├── admin.js      # Area riservata : verrou mot de passe + panneau agence
-│       └── tracking.js   # suivi de colis (réel + démo) + carte + Nominatim
+│       ├── api-config.js # URL du registre partagé (une seule ligne à remplir)
+│       ├── api.js        # PV_API : lecture JSONP / écriture POST du registre partagé
+│       └── tracking.js   # suivi de colis (local + registre partagé) + carte
+├── google-apps-script/
+│   └── Code.gs           # backend gratuit : Apps Script + Google Sheet
+├── GUIDE-BACKEND.md      # installation du registre partagé (5 min)
 └── README.md
 ```
+
+## Registre partagé — suivi depuis n'importe quel appareil
+
+**Problème corrigé** : jusqu'ici le numéro généré dans l'Area riservata était
+écrit uniquement dans le `localStorage` du navigateur de l'agence. Le suivi
+fonctionnait donc **seulement sur ce navigateur** ; ailleurs, `tracking.js`
+bascule sur un rendu de démonstration (données fictives issues d'un hash du
+numéro) — d'où l'impression que « le code ne fonctionne pas pour les autres ».
+
+**Solution** : un registre unique hébergé gratuitement chez Google
+(**Apps Script + Google Sheet**), décrit dans `GUIDE-BACKEND.md`.
+
+| Fichier | Rôle |
+|---|---|
+| `assets/js/api-config.js` | Une ligne : l'URL du déploiement Apps Script (`…/exec`) |
+| `assets/js/api.js` | `PV_API` : lecture JSONP, écriture POST, vérification de publication |
+| `google-apps-script/Code.gs` | Backend : validation S10, lecture/écriture dans la feuille |
+| `GUIDE-BACKEND.md` | Installation en 5 minutes |
+
+**Comportement du tracking** (`tracking.js`) :
+
+1. registre local (agence, même appareil) → affichage immédiat ;
+2. sinon, si `PV_API_URL` est configurée → recherche dans le registre partagé ;
+3. si le numéro est inconnu → **« Spedizione non trovata »** (plus de faux suivi) ;
+4. si le service est injoignable → message d'erreur réseau + WhatsApp de l'agence ;
+5. le mode démo ne s'affiche plus que sur demande explicite (`PV12345678IT`
+   ou `?demo=1`) et uniquement si aucune API n'est configurée.
+
+**Après génération** (Area riservata), la confirmation affiche l'état réel de
+la publication : « 🌐 Online — consultabile da qualsiasi dispositivo » ou un
+avertissement si le registre n'est pas configuré / injoignable.
+
+**Limites assumées** : la lecture d'un numéro est publique (principe même du
+tracking) ; les téléphones sont masqués côté serveur (`NASCONDI_TELEFONI`) ;
+l'écriture est protégée par un jeton partagé visible dans le code source —
+protection anti-abus, pas une authentification forte. La page « Le mie
+spedizioni » reste locale (elle ne liste que les entrées de l'appareil).
 
 ## Feuille de route (prochaines étapes possibles)
 
@@ -216,8 +258,9 @@ PaccoVeloce/
 - Les coordonnées du site sont renseignées (WhatsApp +39 350 870 7243,
   e-mail velocepacco653@gmail.com, siège Via del Fontanile Arenato, 180) :
   à reprendre telles quelles sur Google Business et les mentions légales.
-- Le stockage `localStorage` est **local au navigateur** : parfait pour la
-  démo, à remplacer par une API + base de données pour un usage réel.
+- Le registre des expéditions utilise désormais **Apps Script + Google
+  Sheet** (voir `GUIDE-BACKEND.md`) : le suivi fonctionne sur tous les
+  appareils. Le `localStorage` ne sert plus que de cache local pour l'agence.
 - Le service public Nominatim a une politique d'usage (1 req/s) : prévoir
   un géocodeur en propre pour la production.
 - Les formulaires ne font pas de traitement serveur : à brancher sur votre

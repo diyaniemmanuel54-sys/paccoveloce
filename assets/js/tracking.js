@@ -286,7 +286,7 @@
     var statut = STATUTS[ETAPES[idx].id];
 
     html += '<div class="alert alert--success show">';
-    html += "  <strong>Pacco trovato</strong> — spedizione reale registrata su questo dispositivo — stato attuale: <span class='" + statut.pill + "'>" + statut.label + "</span>";
+    html += "  <strong>Pacco trovato</strong> — spedizione registrata nel sistema PaccoVeloce — stato attuale: <span class='" + statut.pill + "'>" + statut.label + "</span>";
     html += "</div>";
 
     html += '<div class="package-meta">';
@@ -474,15 +474,71 @@
 
   /* ---------- Point d'entrée ---------- */
 
+  /* Numéro valide mais inconnu du registre (ni local, ni en ligne) */
+  function nonTrovato(numero) {
+    var conteneur = document.getElementById("track-result");
+    if (!conteneur) return;
+    conteneur.classList.add("show");
+    conteneur.innerHTML =
+      '<div class="alert alert--error show"><strong>Spedizione non trovata.</strong> ' +
+      "Il numero <strong>" + esc(numero) + "</strong> non risulta ancora registrato nel sistema. " +
+      "Verifica il codice oppure contatta l'agenzia su WhatsApp al +39 350 870 7243." +
+      "</div>" +
+      '<p class="map-note" style="margin-top:12px;">Se la spedizione è stata appena inserita, attendi un minuto e riprova.</p>';
+  }
+
+  /* Le registre partagé n'a pas répondu (réseau, service indisponible) */
+  function erroreRete(numero) {
+    var conteneur = document.getElementById("track-result");
+    if (!conteneur) return;
+    conteneur.classList.add("show");
+    conteneur.innerHTML =
+      '<div class="alert alert--error show"><strong>Sistema di tracciamento non raggiungibile.</strong> ' +
+      "Controlla la connessione a internet e riprova. Se il problema persiste, contatta l'agenzia " +
+      "su WhatsApp al +39 350 870 7243 indicando il numero <strong>" + esc(numero) + "</strong>." +
+      "</div>";
+  }
+
+  /* ---------- Point d'entrée ----------
+     1) registre local (agence, même appareil)
+     2) registre partagé (API) → fonctionne sur TOUS les appareils
+     3) démo uniquement sur demande explicite (PV12345678IT ou ?demo=1) */
+
   function afficher(numero) {
     var sped = null;
     if (window.PV_Spedizioni) {
       try { sped = window.PV_Spedizioni.trova(numero); } catch (e) { sped = null; }
     }
+
     if (sped) {
       afficherReelle(sped);
-    } else {
+      return;
+    }
+
+    if (window.PV_API && window.PV_API.attivo()) {
+      var conteneur = document.getElementById("track-result");
+      if (conteneur) {
+        conteneur.classList.add("show");
+        conteneur.innerHTML =
+          '<div class="alert show"><strong>Ricerca in corso\u2026</strong> ' +
+          "Verifica del numero presso il sistema dell'agenzia.</div>";
+      }
+      window.PV_API.cerca(numero).then(function (record) {
+        if (record) afficherReelle(record);
+        else nonTrovato(numero);
+      }).catch(function () {
+        erroreRete(numero);
+      });
+      return;
+    }
+
+    var demoAutorizzata = numero === "PV12345678IT" ||
+      /(^|[?&])demo=1(&|$)/.test(window.location.search);
+
+    if (demoAutorizzata) {
       afficherDemo(numero);
+    } else {
+      nonTrovato(numero);
     }
   }
 

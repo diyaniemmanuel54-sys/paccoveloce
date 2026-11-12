@@ -227,10 +227,44 @@
       "</div>";
   }
 
+  /* Pubblica la spedizione nel registro condiviso (API) così che il
+     numero sia consultabile da qualsiasi dispositivo. Aggiorna poi il
+     messaggio con l'esito reale (verificato con una rilettura). */
+  function pubblicaOnline(conteneur, sped, amministrazione) {
+    var riga = conteneur.querySelector("[data-online]");
+    if (!riga) return;
+
+    if (!window.PV_API || !window.PV_API.attivo()) {
+      riga.innerHTML = "\u26A0\uFE0F <strong>Registro condiviso non configurato</strong> — " +
+        "questo numero \u00E8 visibile solo su questo dispositivo. " +
+        "Per attivare il tracking da qualsiasi dispositivo segui la guida " +
+        "<code>GUIDE-BACKEND.md</code>.";
+      return;
+    }
+
+    riga.innerHTML = "\uD83C\uDF10 Pubblicazione nel registro condiviso in corso\u2026";
+
+    window.PV_API.salvaEVerifica(sped).then(function (ok) {
+      /* Il conteneur a pu être réaffiché : on relit la ligne courante */
+      var cible = conteneur.querySelector("[data-online]");
+      if (!cible) return;
+      if (ok && amministrazione) {
+        cible.innerHTML = "\uD83C\uDF10 <strong>Online</strong> — questo numero \u00E8 ora consultabile " +
+          "da qualsiasi dispositivo (clienti, smartphone, altri PC).";
+      } else if (ok) {
+        cible.innerHTML = "\uD83C\uDF10 <strong>Online</strong> — spedizione pubblicata nel registro condiviso.";
+      } else {
+        cible.innerHTML = "\u26A0\uFE0F <strong>Pubblicazione online non riuscita</strong> — controlla la " +
+          "connessione o la configurazione dell'API (<code>assets/js/api-config.js</code>). " +
+          "Il numero resta valido solo su questo dispositivo.";
+      }
+    });
+  }
+
   function afficherConfermaInvio(conteneur, sped, amministrazione) {
     var head = amministrazione ? "\u2705 Spedizione registrata" : "\u2705 Prenotazione confermata";
     var intro = amministrazione
-      ? "Numero di consignazione <strong>generato e registrato</strong> nell'elenco locale (tracking reale attivo). Riepilogo inviato all'agenzia (" + EMAIL_AGENZIA + ")."
+      ? "Numero di consignazione <strong>generato e registrato</strong>. Riepilogo inviato all'agenzia (" + EMAIL_AGENZIA + ")."
       : "Il tuo numero di consignazione \u00E8 stato <strong>inviato all'agenzia</strong> (" + EMAIL_AGENZIA + "). Ti contatteremo su WhatsApp per confermare il ritiro.";
     conteneur.innerHTML =
       "<div class='booking-confirm'>" +
@@ -241,9 +275,12 @@
       "  </div>" +
       riepilogoHtml(sped) +
       "  <p class='bc-note'>Conserva questo numero: ti servir\u00E0 per tracciare il pacco e sar\u00E0 comunicato anche al destinatario.</p>" +
+      (amministrazione ? "  <p class='bc-note bc-online' data-online></p>" : "") +
       "  <button type='button' class='btn bc-pdf' style='margin-top:16px;'>\u2B07\uFE0F Scarica la ricevuta (PDF)</button>" +
       "</div>";
     collegaPulsantePdf(conteneur, sped);
+
+    if (amministrazione) pubblicaOnline(conteneur, sped, amministrazione);
   }
 
   function afficherErroreInvio(conteneur, sped, messaggioServeur) {
