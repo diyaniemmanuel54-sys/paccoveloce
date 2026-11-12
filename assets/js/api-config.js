@@ -1,12 +1,19 @@
 /* ============================================================
-   PaccoVeloce — Configuration du registre partagé (API)
+   PaccoVeloce — Configuration du registre partagé
    ------------------------------------------------------------
-   Collez ici l'URL de l'application web Google Apps Script
-   (elle se termine par /exec). Voir GUIDE-BACKEND.md.
+   PV_STORE_URL : espace JSON public qui rend chaque numéro
+   consultable depuis N'IMPORTE QUEL appareil (client, smartphone,
+   autre PC), sans aucune installation ni compte.
 
-   Tant que cette valeur est vide, le site fonctionne comme
-   avant : les numéros ne sont visibles que sur l'appareil qui
-   les a générés (localStorage).
+   Il ne contient QUE des données non nominatives (villes, CAP,
+   province, service, poids, dates) : les noms, rues et téléphones
+   restent sur l'appareil de l'agence.
+
+   PV_API_URL (facultatif) : si vous migrez un jour vers un backend
+   privé Google Apps Script (voir GUIDE-BACKEND.md), collez son URL
+   ici — elle est prioritaire sur PV_STORE_URL.
    ============================================================ */
 
-window.PV_API_URL = ""; /* ex. "https://script.google.com/macros/s/AKfy.../exec" */
+window.PV_STORE_URL = "https://extendsclass.com/api/json-storage/bin/ffaccce";
+
+window.PV_API_URL = "";

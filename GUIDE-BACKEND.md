@@ -1,4 +1,11 @@
-# 🔧 Activer le suivi sur tous les appareils (registre partagé)
+# 🔧 Variante privée du registre partagé (facultative)
+
+> ℹ️ **Le suivi multi-appareils fonctionne déjà, sans rien installer.**
+> `assets/js/api-config.js` pointe vers un espace JSON public
+> (`PV_STORE_URL`) : chaque numéro généré dans l'Area riservata y est publié
+> automatiquement, et les clients le consultent depuis n'importe quel
+> appareil. Ce guide n'est utile que si tu veux **en plus** une copie privée
+> dans un Google Sheet (données complètes, y compris noms et adresses).
 
 ## Pourquoi ce guide ?
 

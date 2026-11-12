@@ -32,6 +32,47 @@
     if (sessionStorage.getItem(CHIAVE) === "1") apri();
   } catch (eSess) {}
 
+  /* --- Ripubblicazione del registro condiviso ------------------
+     Se un numero non si trova da un altro dispositivo, questo
+     pulsante rispedisce tutte le spedizioni locali allo spazio
+     online. Utile anche per ripristinare i dati se lo spazio
+     pubblico viene svuotato. */
+  var btnRipubblica = document.getElementById("btn-ripubblica");
+  var esitoRipubblica = document.getElementById("ripubblica-esito");
+
+  if (btnRipubblica) {
+    btnRipubblica.addEventListener("click", function () {
+      var lista = [];
+      try {
+        if (window.PV_Spedizioni && window.PV_Spedizioni.elenco) lista = window.PV_Spedizioni.elenco() || [];
+      } catch (eLista) { lista = []; }
+
+      if (!lista.length) {
+        if (esitoRipubblica) esitoRipubblica.textContent = "⚠️ Nessuna spedizione salvata su questo dispositivo.";
+        return;
+      }
+      if (!window.PV_API || !window.PV_API.attivo()) {
+        if (esitoRipubblica) esitoRipubblica.textContent = "⚠️ Registro online non disponibile.";
+        return;
+      }
+
+      btnRipubblica.disabled = true;
+      if (esitoRipubblica) esitoRipubblica.textContent = "⏳ Pubblicazione di " + lista.length + " spedizioni…";
+
+      window.PV_API.pubblicaTutti(lista).then(function (n) {
+        btnRipubblica.disabled = false;
+        if (esitoRipubblica) {
+          esitoRipubblica.textContent = n
+            ? "✅ " + n + " spedizioni ripubblicate: ora sono consultabili da qualsiasi dispositivo."
+            : "⚠️ Pubblicazione non riuscita: controlla la connessione e riprova.";
+        }
+      }).catch(function () {
+        btnRipubblica.disabled = false;
+        if (esitoRipubblica) esitoRipubblica.textContent = "⚠️ Pubblicazione non riuscita: controlla la connessione e riprova.";
+      });
+    });
+  }
+
   if (modulo && campo) {
     modulo.addEventListener("submit", function (e) {
       e.preventDefault();

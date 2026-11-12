@@ -97,7 +97,12 @@
   }
 
   function indirizzoCompleto(p) {
-    return p.indirizzo + ", " + p.cap + " " + p.citta + " (" + p.provincia + ")";
+    p = p || {};
+    var riga = ((p.cap ? p.cap + " " : "") + (p.citta || "")).trim();
+    if (p.provincia) riga += (riga ? " (" : "(") + p.provincia + ")";
+    var via = String(p.indirizzo || "").trim();
+    if (via && riga) return via + ", " + riga;
+    return via || riga;
   }
 
   /* Position du colis sur le trajet origine → hub → destination */
@@ -338,7 +343,10 @@
   }
 
   function geocoda(p) {
-    var adresse = p.indirizzo + ", " + p.cap + " " + p.citta + " (" + p.provincia + "), Italia";
+    p = p || {};
+    var base = indirizzoCompleto(p);
+    if (!base) return Promise.resolve(null);
+    var adresse = base + ", Italia";
     var chiave = adresse.toLowerCase();
 
     return new Promise(function (resolve) {
@@ -379,11 +387,16 @@
   /* ---------- Cartes expéditeur / destinataire ---------- */
 
   function partyCard(icona, ruolo, p, tel) {
+    p = p || {};
+    var nome = String(p.nome || "").trim();
+    var indirizzo = indirizzoCompleto(p);
     return '<div class="party-card">' +
       '<div class="party-head"><span class="party-icon">' + icona + '</span>' +
       '<span class="party-role">' + ruolo + '</span></div>' +
-      '<div class="party-name">' + esc(p.nome) + '</div>' +
-      '<div class="party-addr">' + esc(indirizzoCompleto(p)) + '</div>' +
+      (nome ? '<div class="party-name">' + esc(nome) + '</div>' : "") +
+      (indirizzo
+        ? '<div class="party-addr">' + esc(indirizzo) + '</div>'
+        : '<div class="party-addr party-addr--muted">Dati del contatto non pubblicati (privacy)</div>') +
       (tel ? '<div class="party-tel">\uD83D\uDCDE ' + esc(tel) + "</div>" : "") +
       "</div>";
   }
@@ -407,10 +420,18 @@
     html += "  <strong>Pacco trovato</strong> — spedizione registrata nel sistema PaccoVeloce — stato attuale: <span class='" + statut.pill + "'>" + statut.label + "</span>";
     html += "</div>";
 
+    if (sped.parziale) {
+      html += '<p class="map-note" style="margin-top:0;">\uD83D\uDD12 Per motivi di privacy, online sono pubblicati solo citt\u00E0 e CAP di partenza e destinazione. ' +
+        "Nomi, indirizzi completi e telefoni restano riservati all'agenzia.</p>";
+    }
+
+    var servizio = String(sped.servizio || "standard");
     html += '<div class="package-meta">';
     html += "  <div><small>Numero di spedizione</small><strong>" + esc(sped.numero) + "</strong></div>";
-    html += "  <div><small>Servizio</small><strong>" + esc(sped.servizio.charAt(0).toUpperCase() + sped.servizio.slice(1)) + "</strong></div>";
-    html += "  <div><small>Peso dichiarato</small><strong>" + esc(sped.peso) + " kg</strong></div>";
+    html += "  <div><small>Servizio</small><strong>" + esc(servizio.charAt(0).toUpperCase() + servizio.slice(1)) + "</strong></div>";
+    if (String(sped.peso || "").trim()) {
+      html += "  <div><small>Peso dichiarato</small><strong>" + esc(sped.peso) + " kg</strong></div>";
+    }
     html += "  <div><small>Registrata il</small><strong>" + formatDateTime(creatoIl) + "</strong></div>";
     html += "</div>";
 
@@ -421,7 +442,9 @@
 
     /* Actions rapides : étiquette imprimable + espace personnel */
     html += '<div class="track-actions">';
-    html += '  <button type="button" class="btn btn--ghost js-et-spedizione">\uD83D\uDCC4 Stampa etichetta</button>';
+    if (!sped.parziale) {
+      html += '  <button type="button" class="btn btn--ghost js-et-spedizione">\uD83D\uDCC4 Stampa etichetta</button>';
+    }
     html += '  <a class="btn btn--ghost" href="spedizioni.html">\uD83D\uDCE6 Le mie spedizioni</a>';
     html += "</div>";
 
@@ -642,6 +665,14 @@
       return;
     }
 
+    /* Démo uniquement sur demande explicite, avant tout appel réseau */
+    var demoAutorizzata = numero === "PV12345678IT" ||
+      /(^|[?&])demo=1(&|$)/.test(window.location.search);
+    if (demoAutorizzata) {
+      afficherDemo(numero);
+      return;
+    }
+
     if (window.PV_API && window.PV_API.attivo()) {
       var conteneur = document.getElementById("track-result");
       if (conteneur) {
@@ -659,14 +690,7 @@
       return;
     }
 
-    var demoAutorizzata = numero === "PV12345678IT" ||
-      /(^|[?&])demo=1(&|$)/.test(window.location.search);
-
-    if (demoAutorizzata) {
-      afficherDemo(numero);
-    } else {
-      nonTrovato(numero);
-    }
+    nonTrovato(numero);
   }
 
   function erreur() {

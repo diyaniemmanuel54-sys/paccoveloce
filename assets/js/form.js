@@ -235,10 +235,8 @@
     if (!riga) return;
 
     if (!window.PV_API || !window.PV_API.attivo()) {
-      riga.innerHTML = "\u26A0\uFE0F <strong>Registro condiviso non configurato</strong> — " +
-        "questo numero \u00E8 visibile solo su questo dispositivo. " +
-        "Per attivare il tracking da qualsiasi dispositivo segui la guida " +
-        "<code>GUIDE-BACKEND.md</code>.";
+      riga.innerHTML = "\u26A0\uFE0F <strong>Registro condiviso non disponibile</strong> — " +
+        "questo numero resta visibile solo su questo dispositivo. Riprova pi\u00F9 tardi.";
       return;
     }
 
@@ -255,7 +253,7 @@
         cible.innerHTML = "\uD83C\uDF10 <strong>Online</strong> — spedizione pubblicata nel registro condiviso.";
       } else {
         cible.innerHTML = "\u26A0\uFE0F <strong>Pubblicazione online non riuscita</strong> — controlla la " +
-          "connessione o la configurazione dell'API (<code>assets/js/api-config.js</code>). " +
+          "connessione a internet e riprova, oppure usa \u00AB Ripubblica registro online \u00BB nel pannello. " +
           "Il numero resta valido solo su questo dispositivo.";
       }
     });
