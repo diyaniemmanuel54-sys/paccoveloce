@@ -634,7 +634,9 @@
       "Il numero <strong>" + esc(numero) + "</strong> non risulta ancora registrato nel sistema. " +
       "Verifica il codice oppure contatta l'agenzia su WhatsApp al +39 350 870 7243." +
       "</div>" +
-      '<p class="map-note" style="margin-top:12px;">Se la spedizione è stata appena inserita, attendi un minuto e riprova.</p>';
+      '<p class="map-note" style="margin-top:12px;">Se la spedizione è stata appena inserita, attendi un minuto e riprova. ' +
+      "Se il numero ti è stato consegnato prima dell'attivazione del tracciamento online, " +
+      "segnalalo all'agenzia: la attiverà in pochi secondi.</p>";
   }
 
   /* Le registre partagé n'a pas répondu (réseau, service indisponible) */

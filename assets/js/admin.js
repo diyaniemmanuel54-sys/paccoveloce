@@ -25,6 +25,29 @@
     gate.style.display = "none";
     panel.hidden = false;
     try { sessionStorage.setItem(CHIAVE, "1"); } catch (eStore) {}
+    mostraLocali();
+  }
+
+  /* Liste les expéditions enregistrées sur CET appareil : permet à
+     l'agence de vérifier si un numéro (ex. émis avant l'activation
+     du registre) est bien présent ici avant de le republier. */
+  function mostraLocali() {
+    var zone = document.getElementById("admin-locales");
+    if (!zone) return;
+
+    var lista = [];
+    try {
+      if (window.PV_Spedizioni && window.PV_Spedizioni.elenco) lista = window.PV_Spedizioni.elenco() || [];
+    } catch (e) { lista = []; }
+
+    if (!lista.length) {
+      zone.textContent = "📦 Nessuna spedizione salvata su questo dispositivo.";
+      return;
+    }
+
+    var numeri = lista.map(function (s) { return s.numero; }).slice(0, 12).join(", ");
+    zone.textContent = "📦 " + lista.length + " spedizion" + (lista.length === 1 ? "e" : "i") +
+      " su questo dispositivo: " + numeri + (lista.length > 12 ? "…" : "");
   }
 
   /* Sessione già aperta (stessa scheda): niente password ridigitata */
